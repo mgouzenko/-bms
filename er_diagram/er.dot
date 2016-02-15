@@ -51,7 +51,7 @@ digraph ERDiagram{
 		fname->entrant
 		lname->entrant
 		age->entrant
-		state->vehicle
+		{node[label=<<u>state</u>>]state}->vehicle
 		make->vehicle
 		model->vehicle
 		color->vehicle
@@ -65,9 +65,12 @@ digraph ERDiagram{
 		{node[label=state]state2}->building
 		zip_code->building
 		{node[label=email] email2}->building
+		business_name->service_provider
+		service_provider->business_description
 		{node[label=<<u>business_id</u>>]business_id}->service_provider
 		{node[label=phone_number] phone_number2}->service_provider
-		email->service_provider
+		service_provider->email
+
 		{node[label=phone_number] phone_number3}->entrant
 		entrant->drives
 		entrant->is_a1->{rank=same; admin, unit_entrant, service_employee}
