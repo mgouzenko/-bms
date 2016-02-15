@@ -1,4 +1,5 @@
 digraph ERDiagram{
+	splines=ortho
 	{
 		node[fontsize=21]
 		{
@@ -22,19 +23,19 @@ digraph ERDiagram{
 			node[shape=rectangle]
 			{
 				node[penwidth=3]
-				unit
-				parking_spot
+				units
+				parking_spots
 			}
-			unit_entrant
-			building
-			admin
-			entrant
-			vehicle
-			service_provider
-			service_employee
-			guest
-			casual_entrant
-			resident
+			unit_entrants
+			buildings
+			admins
+			entrants
+			vehicles
+			service_providers
+			service_employees
+			guests
+			casual_entrants
+			residents
 		}
 
 		{
@@ -47,57 +48,61 @@ digraph ERDiagram{
 
 	{
 		edge[arrowtail=none, arrowhead=none]
-		{node[label=<<u>entrant_id</u>>]entrant_id}->entrant
-		fname->entrant
-		lname->entrant
-		age->entrant
-		{node[label=<<u>state</u>>]state}->vehicle
-		make->vehicle
-		model->vehicle
-		color->vehicle
-		{node[label=<<u>plate_num</u>>]plate_num}->vehicle
-		{node[label="spot_number\n‾ ‾ ‾ ‾ ‾ ‾"] spot_number}->parking_spot
-		{node[label="unit_id\n‾ ‾ ‾ ‾"]unit_id}->unit
-		floor->unit
-		{node[label=<<u>building_id</u>>]building_id}->building
-		{node[label=phone_number] phone_number}->building
-		street_address->building
-		{node[label=state]state2}->building
-		zip_code->building
-		{node[label=email] email2}->building
-		business_name->service_provider
-		service_provider->business_description
-		{node[label=<<u>business_id</u>>]business_id}->service_provider
-		{node[label=phone_number] phone_number2}->service_provider
-		service_provider->email
+		{node[label=<<u>entrant_id</u>>]entrant_id}->entrants
+		fname->entrants
+		lname->entrants
+		age->entrants
+		{node[label=<<u>state</u>>]state}->vehicles
+		make->vehicles
+		model->vehicles
+		color->vehicles
+		{node[label=<<u>plate_num</u>>]plate_num}->vehicles
+		{node[label="spot_number\n‾ ‾ ‾ ‾ ‾ ‾"] spot_number}->parking_spots
+		{node[label="unit_id\n‾ ‾ ‾ ‾"]unit_id}->units
+		floor->units
+		{node[label=<<u>building_id</u>>]building_id}->buildings
+		{node[label=phone_number] phone_number}->buildings
+		street_address->buildings
+		{node[label=state]state2}->buildings
+		zip_code->buildings
+		{node[label=email] email2}->buildings
+		business_name->service_providers
+		service_providers->business_description
+		{node[label=<<u>business_id</u>>]business_id}->service_providers
+		{node[label=phone_number] phone_number2}->service_providers
+		service_providers->email
 
-		{node[label=phone_number] phone_number3}->entrant
-		entrant->drives
-		entrant->is_a1->{rank=same; admin, unit_entrant, service_employee}
-		unit_entrant->is_a2->{rank=same; guest, casual_entrant, resident}
-		enters->unit
-		unit->owns->parking_spot
-		within->building
-		administers->building
-		service_provider->provides_services->building
-		works_for->service_provider
-		of_a->building
-		in->building
-		occupies->parking_spot
+		{node[label=phone_number] phone_number3}->entrants
+		entrants->drives
+		entrants->is_a1->{rank=same; admins, unit_entrants, service_employees}
+		unit_entrants->is_a2->{rank=same; guests, casual_entrants, residents}
+		enters->units
+		units->owns->parking_spots
+		within->buildings
+		administers->buildings
+		privilege_level->administers
+		service_providers->provides_services->buildings
+		works_for->service_providers
+		of_a->buildings
+		in->buildings
 	}
 
 	{
+		edge[arrowhead=none, arrowtail=normal, dir=back]
+		occupies->parking_spots
+	}
+	{
 		edge[penwidth=3]
-		parking_spot->in
-		unit->within
-		unit_entrant->enters
-		vehicle->occupies
+		parking_spots->in
+		units->within
+		unit_entrants->enters
+		vehicles->occupies
 		{
 			edge[arrowhead=none]
-			entrant->of_a
-			admin->administers
-			service_employee->works_for
-			drives->vehicle
+			entrants->of_a
+			admins->administers
+			service_employees->works_for
+			drives->vehicles
 		}
 	}
 
@@ -105,7 +110,7 @@ digraph ERDiagram{
 		edge[style=invis]
 		drives->state
 		works_for->business_id
-		guest->business_id
+		guests->business_id
 		enters->floor
 		owns->spot_number
 	}
