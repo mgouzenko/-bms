@@ -3,85 +3,107 @@ digraph ERDiagram{
 		node[fontsize=21]
 		{
 			node[shape=diamond]
-			Owns
-			WorksFor
-			Drives
-			Occupies
-			OfA
-			Enters
+			owns
+			works_for
+			drives
+			occupies
+			of_a
+			enters
 			{
 				node[penwidth=3]
-				Within
-				In
+				within
+				in
 			}
-			Administers
-			ProvidesServices
+			administers
+			provides_services
 		}
 
 		{
 			node[shape=rectangle]
 			{
 				node[penwidth=3]
-				Unit
-				ParkingSpot
+				unit
+				parking_spot
 			}
-			UnitEntrant
-			Building
-			Admin
-			Entrant
-			Vehicle
-			ServiceProvider
-			ServiceEmployee
-			Guest
-			CasualEntrant
-			Resident
+			unit_entrant
+			building
+			admin
+			entrant
+			vehicle
+			service_provider
+			service_employee
+			guest
+			casual_entrant
+			resident
 		}
 
 		{
 			node[shape=triangle]
-			{node[label=IsA] is_a1}
-			{node[label=IsA] is_a2}
+			{node[label=is_a] is_a1}
+			{node[label=is_a] is_a2}
 		}
 	}
 
 
 	{
 		edge[arrowtail=none, arrowhead=none]
-		entrant_id->Entrant
-		fname->Entrant
-		lname->Entrant
-		age->Entrant
-		state->Vehicle
-		plate_num->Vehicle
-		spot_number->ParkingSpot
-		building_id->Building
-		business_id->ServiceProvider
-		Entrant->is_a1->{rank=same; Admin, UnitEntrant, ServiceEmployee}
-		UnitEntrant->is_a2->{rank=same; Guest, CasualEntrant, Resident}
-		Entrant->Drives
-		Enters->Unit
-		Unit->Owns->ParkingSpot
-		Within->Building
-		Administers->Building
-		ServiceProvider->ProvidesServices->Building
-		WorksFor->ServiceProvider
-		OfA->Building
-		In->Building
-		Occupies->ParkingSpot
+		{node[label=<<u>entrant_id</u>>]entrant_id}->entrant
+		fname->entrant
+		lname->entrant
+		age->entrant
+		state->vehicle
+		make->vehicle
+		model->vehicle
+		color->vehicle
+		{node[label=<<u>plate_num</u>>]plate_num}->vehicle
+		{node[label="spot_number\n‾ ‾ ‾ ‾ ‾ ‾"] spot_number}->parking_spot
+		{node[label="unit_id\n‾ ‾ ‾ ‾"]unit_id}->unit
+		floor->unit
+		{node[label=<<u>building_id</u>>]building_id}->building
+		{node[label=phone_number] phone_number}->building
+		street_address->building
+		{node[label=state]state2}->building
+		zip_code->building
+		{node[label=email] email2}->building
+		{node[label=<<u>business_id</u>>]business_id}->service_provider
+		{node[label=phone_number] phone_number2}->service_provider
+		email->service_provider
+		{node[label=phone_number] phone_number3}->entrant
+		entrant->drives
+		entrant->is_a1->{rank=same; admin, unit_entrant, service_employee}
+		unit_entrant->is_a2->{rank=same; guest, casual_entrant, resident}
+		enters->unit
+		unit->owns->parking_spot
+		within->building
+		administers->building
+		service_provider->provides_services->building
+		works_for->service_provider
+		of_a->building
+		in->building
+		occupies->parking_spot
 	}
 
 	{
 		edge[penwidth=3]
-		ParkingSpot->In
-		Unit->Within
-		UnitEntrant->Enters
-		Vehicle->Occupies
+		parking_spot->in
+		unit->within
+		unit_entrant->enters
+		vehicle->occupies
 		{
 			edge[arrowhead=none]
-			Entrant->OfA
-			Admin->Administers
-			ServiceEmployee->WorksFor
-			Drives->Vehicle
+			entrant->of_a
+			admin->administers
+			service_employee->works_for
+			drives->vehicle
 		}
+	}
+
+	{
+		edge[style=invis]
+		drives->state
+		works_for->business_id
+		guest->business_id
+		enters->floor
+		owns->spot_number
 	}
 }
