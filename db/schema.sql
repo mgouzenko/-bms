@@ -129,8 +129,8 @@ CREATE TABLE guests ( --superclass is unit entrants
 	FOREIGN KEY (entrant_id) REFERENCES unit_entrants
 );
 
-DROP TABLE if exists parking_spots_within CASCADE;
-CREATE TABLE parking_spots_within ( -- parking spots within a building
+DROP TABLE if exists parking_spots_in CASCADE;
+CREATE TABLE parking_spots_in ( -- parking spots within a building
 	spot_number INTEGER,
 	building_id INTEGER NOT NULL,
 	PRIMARY KEY (spot_number, building_id),
@@ -144,7 +144,7 @@ CREATE TABLE owns ( -- parking spot owned by a unit
 	building_id INTEGER,
 	PRIMARY KEY (unit_id, building_id, spot_number),
 	FOREIGN KEY (unit_id, building_id) REFERENCES units_within,
-	FOREIGN KEY (spot_number, building_id) REFERENCES parking_spots_within
+	FOREIGN KEY (spot_number, building_id) REFERENCES parking_spots_in
 );
 
 DROP TABLE if exists occupies;
@@ -155,5 +155,5 @@ CREATE TABLE occupies ( -- vehicle occupying a parking spot
 	plate_num CHAR(10),
 	PRIMARY KEY (state, plate_num),
 	FOREIGN KEY (state, plate_num) REFERENCES vehicles,
-	FOREIGN KEY (spot_number, building_id) REFERENCES parking_spots_within
+	FOREIGN KEY (spot_number, building_id) REFERENCES parking_spots_in
 );
