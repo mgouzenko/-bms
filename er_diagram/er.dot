@@ -1,49 +1,61 @@
 digraph ERDiagram{
 	{
-		node[shape=diamond]
-		Owns
-		WorksFor
-		Drives
-		Occupies
-		OfA
-		Enters
+		node[fontsize=21]
 		{
-			node[penwidth=3]
-			Within
-			In
+			node[shape=diamond]
+			Owns
+			WorksFor
+			Drives
+			Occupies
+			OfA
+			Enters
+			{
+				node[penwidth=3]
+				Within
+				In
+			}
+			Administers
+			ProvidesServices
 		}
-		Administers
-		ProvidesServices
-	}
 
-	{
-		node[shape=rectangle]
 		{
-			node[penwidth=3]
-			Unit
-			ParkingSpot
+			node[shape=rectangle]
+			{
+				node[penwidth=3]
+				Unit
+				ParkingSpot
+			}
+			UnitEntrant
+			Building
+			Admin
+			Entrant
+			Vehicle
+			ServiceProvider
+			ServiceEmployee
+			Guest
+			CasualEntrant
+			Resident
 		}
-		UnitEntrant
-		Building
-		Admin
-		Entrant
-		Vehicle
-		ServiceProvider
-		ServiceEmployee
-		Guest
-		CasualEntrant
-		Resident
-	}
 
-	{
-		node[shape=triangle]
-		is_a1
-		is_a2
+		{
+			node[shape=triangle]
+			{node[label=IsA] is_a1}
+			{node[label=IsA] is_a2}
+		}
 	}
 
 
 	{
 		edge[arrowtail=none, arrowhead=none]
+		entrant_id->Entrant
+		fname->Entrant
+		lname->Entrant
+		age->Entrant
+		state->Vehicle
+		plate_num->Vehicle
+		spot_number->ParkingSpot
+		building_id->Building
+		business_id->ServiceProvider
 		Entrant->is_a1->{rank=same; Admin, UnitEntrant, ServiceEmployee}
 		UnitEntrant->is_a2->{rank=same; Guest, CasualEntrant, Resident}
 		Entrant->Drives
