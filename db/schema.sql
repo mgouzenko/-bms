@@ -4,6 +4,7 @@ CREATE TABLE entrants (
 	fname CHAR(40),
 	lname CHAR(40),
 	age INTEGER,
+	phone_num INTEGER,
 	PRIMARY KEY (entrant_id)
 );
 
@@ -24,14 +25,21 @@ CREATE TABLE service_employees ( --superclass is entrants
 DROP TABLE if exists buildings CASCADE;
 CREATE TABLE buildings (
 	building_id INTEGER,
-	name CHAR(40),
+	phone_num INTEGER,
+	street_address CHAR(120),
+	state CHAR(2),
+	zip_code INTEGER,
+	email CHAR(120),
 	PRIMARY KEY (building_id)
 );
 
 DROP TABLE if exists service_providers CASCADE;
 CREATE TABLE service_providers (
 	business_id INTEGER,
-	name CHAR(40),
+	business_name CHAR(120),
+	business_description CHAR(1000),
+	phone_num INTEGER,
+	email CHAR(120),
 	PRIMARY KEY (business_id)
 );
 
@@ -57,6 +65,8 @@ DROP TABLE if exists vehicles CASCADE;
 CREATE TABLE vehicles (
 	state CHAR (2),
 	plate_num CHAR(10),
+	make CHAR(30),
+	model CHAR(30),
 	color CHAR(15),
 	PRIMARY KEY (state, plate_num)
 );
@@ -92,6 +102,7 @@ CREATE TABLE drives (
 DROP TABLE if exists units_within CASCADE;
 CREATE TABLE units_within ( -- unit within a building
 	unit_id CHAR(6),
+	floor INTEGER,
 	building_id INTEGER NOT NULL,
 	PRIMARY KEY (unit_id, building_id),
 	FOREIGN KEY (building_id) REFERENCES buildings ON DELETE CASCADE
