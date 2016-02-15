@@ -66,6 +66,7 @@ DROP TABLE if exists parking_spots CASCADE;
 CREATE TABLE parking_spots ( -- parking spots within a building
 	spot_number INTEGER,
 	building_id INTEGER,
+	spot_type CHAR(20), -- Temporary? Permanent? Unloading zone?
 	PRIMARY KEY (spot_number, building_id),
 	FOREIGN KEY (building_id) REFERENCES buildings ON DELETE CASCADE
 );
@@ -77,9 +78,12 @@ CREATE TABLE vehicles (
 	make CHAR(30),
 	model CHAR(30),
 	color CHAR(15),
+	is_requested BOOLEAN,
+	key_number INTEGER,
 	spot_number INTEGER,
 	building_id INTEGER,
 	UNIQUE (spot_number, building_id),
+	UNIQUE (key_number),
 	FOREIGN KEY (spot_number, building_id) REFERENCES parking_spots,
 	PRIMARY KEY (state, plate_num)
 );

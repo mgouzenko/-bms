@@ -51,10 +51,13 @@ digraph ERDiagram{
 		{node[label=<<u>entrant_id</u>>]entrant_id}->entrants
 		fname->entrants
 		lname->entrants
+		username->entrants
 		age->entrants
 		{node[label=<<u>state</u>>]state}->vehicles
 		make->vehicles
 		model->vehicles
+		is_requested->vehicles
+		key_number->vehicles
 		color->vehicles
 		{node[label=<<u>plate_num</u>>]plate_num}->vehicles
 		{node[label="spot_number\n‾ ‾ ‾ ‾ ‾ ‾"] spot_number}->parking_spots
@@ -78,6 +81,7 @@ digraph ERDiagram{
 		unit_entrants->is_a2->{rank=same; guests, casual_entrants, residents}
 		enters->units
 		units->owns->parking_spots
+		spot_type->parking_spots
 		within->buildings
 		administers->buildings
 		privilege_level->administers
