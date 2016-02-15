@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<database name="bms" schema="public" type="PostgreSQL - 9.4.5">
+   <tables>
+      <table name="buildings" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="building_id" nullable="false" remarks="" size="10" type="int4">
+            <child column="building_id" foreignKey="of_a_building_id_fkey" implied="false" onDeleteCascade="false" table="of_a"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="name" nullable="true" remarks="" size="40" type="bpchar"/>
+         <primaryKey column="building_id" sequenceNumberInPK="1"/>
+         <index name="buildings_pkey" unique="true">
+            <column ascending="true" name="building_id"/>
+         </index>
+      </table>
+      <table name="entrants" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="entrant_id" nullable="false" remarks="" size="10" type="int4">
+            <child column="entrant_id" foreignKey="of_a_entrant_id_fkey" implied="false" onDeleteCascade="false" table="of_a"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="name" nullable="true" remarks="" size="40" type="bpchar"/>
+         <primaryKey column="entrant_id" sequenceNumberInPK="1"/>
+         <index name="entrants_pkey" unique="true">
+            <column ascending="true" name="entrant_id"/>
+         </index>
+      </table>
+      <table name="of_a" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="building_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="building_id" foreignKey="of_a_building_id_fkey" implied="false" onDeleteCascade="false" table="buildings"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="entrant_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="entrant_id" foreignKey="of_a_entrant_id_fkey" implied="false" onDeleteCascade="false" table="entrants"/>
+         </column>
+         <primaryKey column="building_id" sequenceNumberInPK="1"/>
+         <primaryKey column="entrant_id" sequenceNumberInPK="2"/>
+         <index name="of_a_pkey" unique="true">
+            <column ascending="true" name="building_id"/>
+            <column ascending="true" name="entrant_id"/>
+         </index>
+      </table>
+   </tables>
+</database>
