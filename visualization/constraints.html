@@ -31,7 +31,7 @@
 <div class='indent'>
 <table width='100%'>
 <tr><td class='container' valign='bottom'><b>
-2 Foreign Key Constraints:</b>
+23 Foreign Key Constraints:</b>
 </td><td class='container' align='right'>
 <table>
   <tr><td class='container' align='right' valign='top'><a href='http://sourceforge.net' target='_blank'><img src='http://sourceforge.net/sflogo.php?group_id=137197&amp;type=1' alt='SourceForge.net' border='0' height='31' width='88'></a></td></tr>
@@ -71,16 +71,163 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </thead>
 <tbody>
   <tr class='even'>
+  <td class='detail'>administers_building_id_fkey</td>
+  <td class='detail'><a href='tables/administers.html'>administers</a>.building_id</td>
+  <td class='detail'><a href='tables/buildings.html'>buildings</a>.building_id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='odd'>
+  <td class='detail'>administers_entrant_id_fkey</td>
+  <td class='detail'><a href='tables/administers.html'>administers</a>.entrant_id</td>
+  <td class='detail'><a href='tables/admins.html'>admins</a>.entrant_id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='even'>
+  <td class='detail'>admins_entrant_id_fkey</td>
+  <td class='detail'><a href='tables/admins.html'>admins</a>.entrant_id</td>
+  <td class='detail'><a href='tables/entrants.html'>entrants</a>.entrant_id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='odd'>
+  <td class='detail'>casual_entrants_entrant_id_fkey</td>
+  <td class='detail'><a href='tables/casual_entrants.html'>casual_entrants</a>.entrant_id</td>
+  <td class='detail'><a href='tables/entrants.html'>entrants</a>.entrant_id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='even'>
+  <td class='detail'>drives_entrant_id_fkey</td>
+  <td class='detail'><a href='tables/drives.html'>drives</a>.entrant_id</td>
+  <td class='detail'><a href='tables/entrants.html'>entrants</a>.entrant_id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='odd'>
+  <td class='detail'>drives_state_fkey</td>
+  <td class='detail'><a href='tables/drives.html'>drives</a>.state<br><a href='tables/drives.html'>drives</a>.plate_num</td>
+  <td class='detail'><a href='tables/vehicles.html'>vehicles</a>.state<br><a href='tables/vehicles.html'>vehicles</a>.plate_num</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='even'>
+  <td class='detail'>enters_entrant_id_fkey</td>
+  <td class='detail'><a href='tables/enters.html'>enters</a>.entrant_id</td>
+  <td class='detail'><a href='tables/entrants.html'>entrants</a>.entrant_id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='odd'>
+  <td class='detail'>enters_unit_id_fkey</td>
+  <td class='detail'><a href='tables/enters.html'>enters</a>.unit_id<br><a href='tables/enters.html'>enters</a>.building_id</td>
+  <td class='detail'><a href='tables/units_within.html'>units_within</a>.unit_id<br><a href='tables/units_within.html'>units_within</a>.building_id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='even'>
+  <td class='detail'>guests_entrant_id_fkey</td>
+  <td class='detail'><a href='tables/guests.html'>guests</a>.entrant_id</td>
+  <td class='detail'><a href='tables/entrants.html'>entrants</a>.entrant_id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='odd'>
+  <td class='detail'>occupies_spot_number_fkey</td>
+  <td class='detail'><a href='tables/occupies.html'>occupies</a>.spot_number<br><a href='tables/occupies.html'>occupies</a>.building_id</td>
+  <td class='detail'><a href='tables/parking_spots_within.html'>parking_spots_within</a>.spot_number<br><a href='tables/parking_spots_within.html'>parking_spots_within</a>.building_id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='even'>
+  <td class='detail'>occupies_state_fkey</td>
+  <td class='detail'><a href='tables/occupies.html'>occupies</a>.state<br><a href='tables/occupies.html'>occupies</a>.plate_num</td>
+  <td class='detail'><a href='tables/vehicles.html'>vehicles</a>.state<br><a href='tables/vehicles.html'>vehicles</a>.plate_num</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='odd'>
   <td class='detail'>of_a_building_id_fkey</td>
   <td class='detail'><a href='tables/of_a.html'>of_a</a>.building_id</td>
   <td class='detail'><a href='tables/buildings.html'>buildings</a>.building_id</td>
   <td class='detail'><span title='Restrict delete:
  Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
  </tr>
-  <tr class='odd'>
+  <tr class='even'>
   <td class='detail'>of_a_entrant_id_fkey</td>
   <td class='detail'><a href='tables/of_a.html'>of_a</a>.entrant_id</td>
   <td class='detail'><a href='tables/entrants.html'>entrants</a>.entrant_id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='odd'>
+  <td class='detail'>owns_spot_number_fkey</td>
+  <td class='detail'><a href='tables/owns.html'>owns</a>.spot_number<br><a href='tables/owns.html'>owns</a>.building_id</td>
+  <td class='detail'><a href='tables/parking_spots_within.html'>parking_spots_within</a>.spot_number<br><a href='tables/parking_spots_within.html'>parking_spots_within</a>.building_id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='even'>
+  <td class='detail'>owns_unit_id_fkey</td>
+  <td class='detail'><a href='tables/owns.html'>owns</a>.unit_id<br><a href='tables/owns.html'>owns</a>.building_id</td>
+  <td class='detail'><a href='tables/units_within.html'>units_within</a>.unit_id<br><a href='tables/units_within.html'>units_within</a>.building_id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='odd'>
+  <td class='detail'>parking_spots_within_building_id_fkey</td>
+  <td class='detail'><a href='tables/parking_spots_within.html'>parking_spots_within</a>.building_id</td>
+  <td class='detail'><a href='tables/buildings.html'>buildings</a>.building_id</td>
+  <td class='detail'><span title='Cascade on delete:
+ Deletion of parent deletes child'>Cascade on delete&nbsp;</span></td>
+ </tr>
+  <tr class='even'>
+  <td class='detail'>provides_services_for_building_id_fkey</td>
+  <td class='detail'><a href='tables/provides_services_for.html'>provides_services_for</a>.building_id</td>
+  <td class='detail'><a href='tables/buildings.html'>buildings</a>.building_id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='odd'>
+  <td class='detail'>provides_services_for_business_id_fkey</td>
+  <td class='detail'><a href='tables/provides_services_for.html'>provides_services_for</a>.business_id</td>
+  <td class='detail'><a href='tables/service_providers.html'>service_providers</a>.business_id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='even'>
+  <td class='detail'>residents_entrant_id_fkey</td>
+  <td class='detail'><a href='tables/residents.html'>residents</a>.entrant_id</td>
+  <td class='detail'><a href='tables/entrants.html'>entrants</a>.entrant_id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='odd'>
+  <td class='detail'>service_employees_entrant_id_fkey</td>
+  <td class='detail'><a href='tables/service_employees.html'>service_employees</a>.entrant_id</td>
+  <td class='detail'><a href='tables/entrants.html'>entrants</a>.entrant_id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='even'>
+  <td class='detail'>units_within_building_id_fkey</td>
+  <td class='detail'><a href='tables/units_within.html'>units_within</a>.building_id</td>
+  <td class='detail'><a href='tables/buildings.html'>buildings</a>.building_id</td>
+  <td class='detail'><span title='Cascade on delete:
+ Deletion of parent deletes child'>Cascade on delete&nbsp;</span></td>
+ </tr>
+  <tr class='odd'>
+  <td class='detail'>works_for_business_id_fkey</td>
+  <td class='detail'><a href='tables/works_for.html'>works_for</a>.business_id</td>
+  <td class='detail'><a href='tables/service_providers.html'>service_providers</a>.business_id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='even'>
+  <td class='detail'>works_for_entrant_id_fkey</td>
+  <td class='detail'><a href='tables/works_for.html'>works_for</a>.entrant_id</td>
+  <td class='detail'><a href='tables/service_employees.html'>service_employees</a>.entrant_id</td>
   <td class='detail'><span title='Restrict delete:
  Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
  </tr>

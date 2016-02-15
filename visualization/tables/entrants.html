@@ -100,7 +100,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </tr>
 </thead>
 <tbody valign='top'>
-<tr class='even'>
+<tr class='odd'>
  <td class='primaryKey' title='Primary Key'>entrant_id</td>
  <td class='detail'>int4</td>
  <td class='detail' align='right'>10</td>
@@ -109,10 +109,52 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'></td>
  <td class='detail'>
   <table border='0' width='100%' cellspacing='0' cellpadding='0'>
-   <tr class='relative even' valign='top'>
+   <tr class='relative odd' valign='top'>
+    <td class='relatedTable detail' title="admins.entrant_id refs entrants.entrant_id via admins_entrant_id_fkey"><a href='admins.html'>admins</a><span class='relatedKey'>.entrant_id</span>
+    </td>
+    <td class='constraint detail'>admins_entrant_id_fkey<span title='Restrict delete:
+ Parent cannot be deleted if children exist'>&nbsp;R</span></td>
+   </tr>
+   <tr class='relative odd' valign='top'>
+    <td class='relatedTable detail' title="casual_entrants.entrant_id refs entrants.entrant_id via casual_entrants_entrant_id_fkey"><a href='casual_entrants.html'>casual_entrants</a><span class='relatedKey'>.entrant_id</span>
+    </td>
+    <td class='constraint detail'>casual_entrants_entrant_id_fkey<span title='Restrict delete:
+ Parent cannot be deleted if children exist'>&nbsp;R</span></td>
+   </tr>
+   <tr class='relative odd' valign='top'>
+    <td class='relatedTable detail' title="drives.entrant_id refs entrants.entrant_id via drives_entrant_id_fkey"><a href='drives.html'>drives</a><span class='relatedKey'>.entrant_id</span>
+    </td>
+    <td class='constraint detail'>drives_entrant_id_fkey<span title='Restrict delete:
+ Parent cannot be deleted if children exist'>&nbsp;R</span></td>
+   </tr>
+   <tr class='relative odd' valign='top'>
+    <td class='relatedTable detail' title="enters.entrant_id refs entrants.entrant_id via enters_entrant_id_fkey"><a href='enters.html'>enters</a><span class='relatedKey'>.entrant_id</span>
+    </td>
+    <td class='constraint detail'>enters_entrant_id_fkey<span title='Restrict delete:
+ Parent cannot be deleted if children exist'>&nbsp;R</span></td>
+   </tr>
+   <tr class='relative odd' valign='top'>
+    <td class='relatedTable detail' title="guests.entrant_id refs entrants.entrant_id via guests_entrant_id_fkey"><a href='guests.html'>guests</a><span class='relatedKey'>.entrant_id</span>
+    </td>
+    <td class='constraint detail'>guests_entrant_id_fkey<span title='Restrict delete:
+ Parent cannot be deleted if children exist'>&nbsp;R</span></td>
+   </tr>
+   <tr class='relative odd' valign='top'>
     <td class='relatedTable detail' title="of_a.entrant_id refs entrants.entrant_id via of_a_entrant_id_fkey"><a href='of_a.html'>of_a</a><span class='relatedKey'>.entrant_id</span>
     </td>
     <td class='constraint detail'>of_a_entrant_id_fkey<span title='Restrict delete:
+ Parent cannot be deleted if children exist'>&nbsp;R</span></td>
+   </tr>
+   <tr class='relative odd' valign='top'>
+    <td class='relatedTable detail' title="residents.entrant_id refs entrants.entrant_id via residents_entrant_id_fkey"><a href='residents.html'>residents</a><span class='relatedKey'>.entrant_id</span>
+    </td>
+    <td class='constraint detail'>residents_entrant_id_fkey<span title='Restrict delete:
+ Parent cannot be deleted if children exist'>&nbsp;R</span></td>
+   </tr>
+   <tr class='relative odd' valign='top'>
+    <td class='relatedTable detail' title="service_employees.entrant_id refs entrants.entrant_id via service_employees_entrant_id_fkey"><a href='service_employees.html'>service_employees</a><span class='relatedKey'>.entrant_id</span>
+    </td>
+    <td class='constraint detail'>service_employees_entrant_id_fkey<span title='Restrict delete:
  Parent cannot be deleted if children exist'>&nbsp;R</span></td>
    </tr>
   </table>
@@ -120,7 +162,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>name</td>
  <td class='detail'>bpchar</td>
  <td class='detail' align='right'>40</td>
@@ -132,7 +174,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='comment detail'></td>
 </tr>
 </table>
-<p title='2 columns'>Table contained 0 rows at Sun Feb 14 20:00 EST 2016<p/>
+<p title='2 columns'>Table contained 0 rows at Mon Feb 15 00:36 EST 2016<p/>
 </td></tr></table>
 <div class='indent'>
 <b>Indexes:</b>
@@ -158,14 +200,32 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 <br><form action='get'><b>Close relationships</b><span class='degrees' id='degrees' title='Detail diminishes with increased separation from entrants'>
 &nbsp;within <label for='oneDegree'><input type='radio' name='degrees' id='oneDegree' checked>one</label>  <label for='twoDegrees'><input type='radio' name='degrees' id='twoDegrees'>two degrees</label> of separation</span><b>:</b></form>
 <map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" id="node1" href="of_a.html" title="of_a" alt="" coords="231,5,347,107">
-<area shape="rect" id="node2" href="entrants.html" title="entrants" alt="" coords="5,27,187,133">
+<area shape="rect" id="node1" href="admins.html" title="admins" alt="" coords="244,5,372,84">
+<area shape="rect" id="node2" href="entrants.html" title="entrants" alt="" coords="5,409,187,515">
+<area shape="rect" id="node3" href="casual_entrants.html" title="casual_entrants" alt="" coords="242,101,374,180">
+<area shape="rect" id="node4" href="drives.html" title="drives" alt="" coords="250,197,366,321">
+<area shape="rect" id="node5" href="enters.html" title="enters" alt="" coords="250,339,366,463">
+<area shape="rect" id="node6" href="guests.html" title="guests" alt="" coords="250,480,366,559">
+<area shape="rect" id="node7" href="of_a.html" title="of_a" alt="" coords="250,577,366,678">
+<area shape="rect" id="node8" href="residents.html" title="residents" alt="" coords="250,696,366,775">
+<area shape="rect" id="node9" href="service_employees.html" title="service_employees" alt="" coords="231,792,385,871">
 </map>
   <a name='diagram'><img id='oneDegreeImg' src='../diagrams/entrants.1degree.png' usemap='#oneDegreeRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>
 <map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="of_a.html" title="of_a" alt="" coords="231,45,347,146">
-<area shape="rect" id="node2" href="buildings.html" title="buildings" alt="" coords="38,5,154,84">
-<area shape="rect" id="node3" href="entrants.html" title="entrants" alt="" coords="5,102,187,209">
+<area shape="rect" id="node1" href="administers.html" title="administers" alt="" coords="429,56,545,134">
+<area shape="rect" id="node2" href="buildings.html" title="buildings" alt="" coords="38,32,154,110">
+<area shape="rect" id="node3" href="admins.html" title="admins" alt="" coords="244,153,372,232">
+<area shape="rect" id="node4" href="entrants.html" title="entrants" alt="" coords="5,430,187,536">
+<area shape="rect" id="node5" href="casual_entrants.html" title="casual_entrants" alt="" coords="242,382,374,461">
+<area shape="rect" id="node6" href="drives.html" title="drives" alt="" coords="250,766,366,890">
+<area shape="rect" id="node7" href="vehicles.html" title="vehicles" alt="" coords="38,800,154,878">
+<area shape="rect" id="node8" href="enters.html" title="enters" alt="" coords="429,241,545,365">
+<area shape="rect" id="node9" href="units_within.html" title="units_within" alt="" coords="244,286,372,365">
+<area shape="rect" id="node10" href="guests.html" title="guests" alt="" coords="250,478,366,557">
+<area shape="rect" id="node11" href="of_a.html" title="of_a" alt="" coords="250,34,366,135">
+<area shape="rect" id="node12" href="residents.html" title="residents" alt="" coords="250,574,366,653">
+<area shape="rect" id="node13" href="service_employees.html" title="service_employees" alt="" coords="231,670,385,749">
+<area shape="rect" id="node14" href="works_for.html" title="works_for" alt="" coords="429,670,545,749">
 </map>
 
   <a name='diagram'><img id='twoDegreesImg' src='../diagrams/entrants.2degrees.png' usemap='#twoDegreesRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>

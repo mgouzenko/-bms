@@ -19,17 +19,86 @@ digraph "twoDegreesRelationshipsDiagram" {
   edge [
     arrowsize="0.8"
   ];
+  "administers":"elipses":w -> "buildings":"elipses":e [arrowhead=none dir=back arrowtail=crowodot];
+  "administers":"elipses":w -> "admins":"entrant_id":e [arrowhead=none dir=back arrowtail=crowodot];
+  "admins":"entrant_id":w -> "entrants":"entrant_id.type":e [arrowhead=none dir=back arrowtail=teeodot];
+  "casual_entrants":"entrant_id":w -> "entrants":"entrant_id.type":e [arrowhead=none dir=back arrowtail=teeodot];
+  "drives":"entrant_id":w -> "entrants":"entrant_id.type":e [arrowhead=none dir=back arrowtail=crowodot];
+  "drives":"plate_num":w -> "vehicles":"elipses":e [arrowhead=none dir=back arrowtail=crowodot];
+  "drives":"state":w -> "vehicles":"elipses":e [arrowhead=none dir=back arrowtail=crowodot];
+  "enters":"building_id":w -> "units_within":"elipses":e [arrowhead=none dir=back arrowtail=crowodot];
+  "enters":"entrant_id":w -> "entrants":"entrant_id.type":e [arrowhead=none dir=back arrowtail=crowodot];
+  "enters":"unit_id":w -> "units_within":"elipses":e [arrowhead=none dir=back arrowtail=crowodot];
+  "guests":"entrant_id":w -> "entrants":"entrant_id.type":e [arrowhead=none dir=back arrowtail=teeodot];
   "of_a":"building_id":w -> "buildings":"elipses":e [arrowhead=none dir=back arrowtail=crowodot];
   "of_a":"entrant_id":w -> "entrants":"entrant_id.type":e [arrowhead=none dir=back arrowtail=crowodot];
+  "residents":"entrant_id":w -> "entrants":"entrant_id.type":e [arrowhead=none dir=back arrowtail=teeodot];
+  "service_employees":"entrant_id":w -> "entrants":"entrant_id.type":e [arrowhead=none dir=back arrowtail=teeodot];
+  "units_within":"elipses":w -> "buildings":"elipses":e [arrowhead=none dir=back arrowtail=crowodot];
+  "works_for":"elipses":w -> "service_employees":"entrant_id":e [arrowhead=none dir=back arrowtail=crowodot];
+  "administers" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">administers</TD></TR>
+      <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 2</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+    </TABLE>>
+    URL="administers.html"
+    tooltip="administers"
+  ];
+  "admins" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">admins</TD></TR>
+      <TR><TD PORT="entrant_id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">entrant_id</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+    </TABLE>>
+    URL="admins.html"
+    tooltip="admins"
+  ];
   "buildings" [
     label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
       <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">buildings</TD></TR>
       <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">5 &gt;</TD></TR>
     </TABLE>>
     URL="buildings.html"
     tooltip="buildings"
+  ];
+  "casual_entrants" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">casual_entrants</TD></TR>
+      <TR><TD PORT="entrant_id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">entrant_id</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+    </TABLE>>
+    URL="casual_entrants.html"
+    tooltip="casual_entrants"
+  ];
+  "drives" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">drives</TD></TR>
+      <TR><TD PORT="entrant_id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">entrant_id</TD></TR>
+      <TR><TD PORT="state" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">state</TD></TR>
+      <TR><TD PORT="plate_num" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">plate_num</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 3</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+    </TABLE>>
+    URL="drives.html"
+    tooltip="drives"
+  ];
+  "enters" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">enters</TD></TR>
+      <TR><TD PORT="entrant_id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">entrant_id</TD></TR>
+      <TR><TD PORT="unit_id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">unit_id</TD></TR>
+      <TR><TD PORT="building_id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">building_id</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 3</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+    </TABLE>>
+    URL="enters.html"
+    tooltip="enters"
   ];
   "entrants" [
     label=<
@@ -37,10 +106,20 @@ digraph "twoDegreesRelationshipsDiagram" {
       <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">entrants</TD></TR>
       <TR><TD PORT="entrant_id" COLSPAN="2" BGCOLOR="#bed1b8" ALIGN="LEFT">entrant_id</TD><TD PORT="entrant_id.type" ALIGN="LEFT">int4[10]</TD></TR>
       <TR><TD PORT="name" COLSPAN="2" ALIGN="LEFT">name</TD><TD PORT="name.type" ALIGN="LEFT">bpchar[40]</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 0</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 0</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">8 &gt;</TD></TR>
     </TABLE>>
     URL="entrants.html"
     tooltip="entrants"
+  ];
+  "guests" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">guests</TD></TR>
+      <TR><TD PORT="entrant_id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">entrant_id</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+    </TABLE>>
+    URL="guests.html"
+    tooltip="guests"
   ];
   "of_a" [
     label=<
@@ -52,5 +131,55 @@ digraph "twoDegreesRelationshipsDiagram" {
     </TABLE>>
     URL="of_a.html"
     tooltip="of_a"
+  ];
+  "residents" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">residents</TD></TR>
+      <TR><TD PORT="entrant_id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">entrant_id</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+    </TABLE>>
+    URL="residents.html"
+    tooltip="residents"
+  ];
+  "service_employees" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">service_employees</TD></TR>
+      <TR><TD PORT="entrant_id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">entrant_id</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+    </TABLE>>
+    URL="service_employees.html"
+    tooltip="service_employees"
+  ];
+  "units_within" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">units_within</TD></TR>
+      <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">4 &gt;</TD></TR>
+    </TABLE>>
+    URL="units_within.html"
+    tooltip="units_within"
+  ];
+  "vehicles" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">vehicles</TD></TR>
+      <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">4 &gt;</TD></TR>
+    </TABLE>>
+    URL="vehicles.html"
+    tooltip="vehicles"
+  ];
+  "works_for" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">works_for</TD></TR>
+      <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 2</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+    </TABLE>>
+    URL="works_for.html"
+    tooltip="works_for"
   ];
 }

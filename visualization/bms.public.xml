@@ -1,9 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <database name="bms" schema="public" type="PostgreSQL - 9.4.5">
    <tables>
+      <table name="administers" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="entrant_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="entrant_id" foreignKey="administers_entrant_id_fkey" implied="false" onDeleteCascade="false" table="admins"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="building_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="building_id" foreignKey="administers_building_id_fkey" implied="false" onDeleteCascade="false" table="buildings"/>
+         </column>
+         <primaryKey column="entrant_id" sequenceNumberInPK="1"/>
+         <primaryKey column="building_id" sequenceNumberInPK="2"/>
+         <index name="administers_pkey" unique="true">
+            <column ascending="true" name="entrant_id"/>
+            <column ascending="true" name="building_id"/>
+         </index>
+      </table>
+      <table name="admins" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="entrant_id" nullable="false" remarks="" size="10" type="int4">
+            <child column="entrant_id" foreignKey="administers_entrant_id_fkey" implied="false" onDeleteCascade="false" table="administers"/>
+            <parent column="entrant_id" foreignKey="admins_entrant_id_fkey" implied="false" onDeleteCascade="false" table="entrants"/>
+         </column>
+         <primaryKey column="entrant_id" sequenceNumberInPK="1"/>
+         <index name="admins_pkey" unique="true">
+            <column ascending="true" name="entrant_id"/>
+         </index>
+      </table>
       <table name="buildings" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" digits="0" id="0" name="building_id" nullable="false" remarks="" size="10" type="int4">
+            <child column="building_id" foreignKey="administers_building_id_fkey" implied="false" onDeleteCascade="false" table="administers"/>
             <child column="building_id" foreignKey="of_a_building_id_fkey" implied="false" onDeleteCascade="false" table="of_a"/>
+            <child column="building_id" foreignKey="parking_spots_within_building_id_fkey" implied="false" onDeleteCascade="true" table="parking_spots_within"/>
+            <child column="building_id" foreignKey="provides_services_for_building_id_fkey" implied="false" onDeleteCascade="false" table="provides_services_for"/>
+            <child column="building_id" foreignKey="units_within_building_id_fkey" implied="false" onDeleteCascade="true" table="units_within"/>
          </column>
          <column autoUpdated="false" digits="0" id="1" name="name" nullable="true" remarks="" size="40" type="bpchar"/>
          <primaryKey column="building_id" sequenceNumberInPK="1"/>
@@ -11,14 +39,101 @@
             <column ascending="true" name="building_id"/>
          </index>
       </table>
+      <table name="casual_entrants" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="entrant_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="entrant_id" foreignKey="casual_entrants_entrant_id_fkey" implied="false" onDeleteCascade="false" table="entrants"/>
+         </column>
+         <primaryKey column="entrant_id" sequenceNumberInPK="1"/>
+         <index name="casual_entrants_pkey" unique="true">
+            <column ascending="true" name="entrant_id"/>
+         </index>
+      </table>
+      <table name="drives" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="entrant_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="entrant_id" foreignKey="drives_entrant_id_fkey" implied="false" onDeleteCascade="false" table="entrants"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="state" nullable="false" remarks="" size="2" type="bpchar">
+            <parent column="state" foreignKey="drives_state_fkey" implied="false" onDeleteCascade="false" table="vehicles"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="plate_num" nullable="false" remarks="" size="10" type="bpchar">
+            <parent column="plate_num" foreignKey="drives_state_fkey" implied="false" onDeleteCascade="false" table="vehicles"/>
+         </column>
+         <primaryKey column="entrant_id" sequenceNumberInPK="1"/>
+         <primaryKey column="state" sequenceNumberInPK="2"/>
+         <primaryKey column="plate_num" sequenceNumberInPK="3"/>
+         <index name="drives_pkey" unique="true">
+            <column ascending="true" name="entrant_id"/>
+            <column ascending="true" name="state"/>
+            <column ascending="true" name="plate_num"/>
+         </index>
+      </table>
+      <table name="enters" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="entrant_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="entrant_id" foreignKey="enters_entrant_id_fkey" implied="false" onDeleteCascade="false" table="entrants"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="unit_id" nullable="false" remarks="" size="6" type="bpchar">
+            <parent column="unit_id" foreignKey="enters_unit_id_fkey" implied="false" onDeleteCascade="false" table="units_within"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="building_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="building_id" foreignKey="enters_unit_id_fkey" implied="false" onDeleteCascade="false" table="units_within"/>
+         </column>
+         <primaryKey column="entrant_id" sequenceNumberInPK="1"/>
+         <primaryKey column="unit_id" sequenceNumberInPK="2"/>
+         <primaryKey column="building_id" sequenceNumberInPK="3"/>
+         <index name="enters_pkey" unique="true">
+            <column ascending="true" name="entrant_id"/>
+            <column ascending="true" name="unit_id"/>
+            <column ascending="true" name="building_id"/>
+         </index>
+      </table>
       <table name="entrants" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" digits="0" id="0" name="entrant_id" nullable="false" remarks="" size="10" type="int4">
+            <child column="entrant_id" foreignKey="admins_entrant_id_fkey" implied="false" onDeleteCascade="false" table="admins"/>
+            <child column="entrant_id" foreignKey="casual_entrants_entrant_id_fkey" implied="false" onDeleteCascade="false" table="casual_entrants"/>
+            <child column="entrant_id" foreignKey="drives_entrant_id_fkey" implied="false" onDeleteCascade="false" table="drives"/>
+            <child column="entrant_id" foreignKey="enters_entrant_id_fkey" implied="false" onDeleteCascade="false" table="enters"/>
+            <child column="entrant_id" foreignKey="guests_entrant_id_fkey" implied="false" onDeleteCascade="false" table="guests"/>
             <child column="entrant_id" foreignKey="of_a_entrant_id_fkey" implied="false" onDeleteCascade="false" table="of_a"/>
+            <child column="entrant_id" foreignKey="residents_entrant_id_fkey" implied="false" onDeleteCascade="false" table="residents"/>
+            <child column="entrant_id" foreignKey="service_employees_entrant_id_fkey" implied="false" onDeleteCascade="false" table="service_employees"/>
          </column>
          <column autoUpdated="false" digits="0" id="1" name="name" nullable="true" remarks="" size="40" type="bpchar"/>
          <primaryKey column="entrant_id" sequenceNumberInPK="1"/>
          <index name="entrants_pkey" unique="true">
             <column ascending="true" name="entrant_id"/>
+         </index>
+      </table>
+      <table name="guests" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="entrant_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="entrant_id" foreignKey="guests_entrant_id_fkey" implied="false" onDeleteCascade="false" table="entrants"/>
+         </column>
+         <primaryKey column="entrant_id" sequenceNumberInPK="1"/>
+         <index name="guests_pkey" unique="true">
+            <column ascending="true" name="entrant_id"/>
+         </index>
+      </table>
+      <table name="occupies" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="spot_number" nullable="false" remarks="" size="10" type="int4">
+            <parent column="spot_number" foreignKey="occupies_spot_number_fkey" implied="false" onDeleteCascade="false" table="parking_spots_within"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="building_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="building_id" foreignKey="occupies_spot_number_fkey" implied="false" onDeleteCascade="false" table="parking_spots_within"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="state" nullable="false" remarks="" size="2" type="bpchar">
+            <parent column="state" foreignKey="occupies_state_fkey" implied="false" onDeleteCascade="false" table="vehicles"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="plate_num" nullable="false" remarks="" size="10" type="bpchar">
+            <parent column="plate_num" foreignKey="occupies_state_fkey" implied="false" onDeleteCascade="false" table="vehicles"/>
+         </column>
+         <primaryKey column="spot_number" sequenceNumberInPK="1"/>
+         <primaryKey column="building_id" sequenceNumberInPK="2"/>
+         <primaryKey column="state" sequenceNumberInPK="3"/>
+         <primaryKey column="plate_num" sequenceNumberInPK="4"/>
+         <index name="occupies_pkey" unique="true">
+            <column ascending="true" name="spot_number"/>
+            <column ascending="true" name="building_id"/>
+            <column ascending="true" name="state"/>
+            <column ascending="true" name="plate_num"/>
          </index>
       </table>
       <table name="of_a" numRows="0" remarks="" schema="public" type="TABLE">
@@ -33,6 +148,135 @@
          <index name="of_a_pkey" unique="true">
             <column ascending="true" name="building_id"/>
             <column ascending="true" name="entrant_id"/>
+         </index>
+      </table>
+      <table name="owns" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="unit_id" nullable="false" remarks="" size="6" type="bpchar">
+            <parent column="unit_id" foreignKey="owns_unit_id_fkey" implied="false" onDeleteCascade="false" table="units_within"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="spot_number" nullable="false" remarks="" size="10" type="int4">
+            <parent column="spot_number" foreignKey="owns_spot_number_fkey" implied="false" onDeleteCascade="false" table="parking_spots_within"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="building_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="building_id" foreignKey="owns_spot_number_fkey" implied="false" onDeleteCascade="false" table="parking_spots_within"/>
+            <parent column="building_id" foreignKey="owns_unit_id_fkey" implied="false" onDeleteCascade="false" table="units_within"/>
+         </column>
+         <primaryKey column="unit_id" sequenceNumberInPK="1"/>
+         <primaryKey column="building_id" sequenceNumberInPK="2"/>
+         <primaryKey column="spot_number" sequenceNumberInPK="3"/>
+         <index name="owns_pkey" unique="true">
+            <column ascending="true" name="unit_id"/>
+            <column ascending="true" name="building_id"/>
+            <column ascending="true" name="spot_number"/>
+         </index>
+      </table>
+      <table name="parking_spots_within" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="spot_number" nullable="false" remarks="" size="10" type="int4">
+            <child column="spot_number" foreignKey="occupies_spot_number_fkey" implied="false" onDeleteCascade="false" table="occupies"/>
+            <child column="spot_number" foreignKey="owns_spot_number_fkey" implied="false" onDeleteCascade="false" table="owns"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="building_id" nullable="false" remarks="" size="10" type="int4">
+            <child column="building_id" foreignKey="occupies_spot_number_fkey" implied="false" onDeleteCascade="false" table="occupies"/>
+            <child column="building_id" foreignKey="owns_spot_number_fkey" implied="false" onDeleteCascade="false" table="owns"/>
+            <parent column="building_id" foreignKey="parking_spots_within_building_id_fkey" implied="false" onDeleteCascade="true" table="buildings"/>
+         </column>
+         <primaryKey column="spot_number" sequenceNumberInPK="1"/>
+         <primaryKey column="building_id" sequenceNumberInPK="2"/>
+         <index name="parking_spots_within_pkey" unique="true">
+            <column ascending="true" name="spot_number"/>
+            <column ascending="true" name="building_id"/>
+         </index>
+      </table>
+      <table name="provides_services_for" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="business_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="business_id" foreignKey="provides_services_for_business_id_fkey" implied="false" onDeleteCascade="false" table="service_providers"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="building_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="building_id" foreignKey="provides_services_for_building_id_fkey" implied="false" onDeleteCascade="false" table="buildings"/>
+         </column>
+         <primaryKey column="business_id" sequenceNumberInPK="1"/>
+         <primaryKey column="building_id" sequenceNumberInPK="2"/>
+         <index name="provides_services_for_pkey" unique="true">
+            <column ascending="true" name="business_id"/>
+            <column ascending="true" name="building_id"/>
+         </index>
+      </table>
+      <table name="residents" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="entrant_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="entrant_id" foreignKey="residents_entrant_id_fkey" implied="false" onDeleteCascade="false" table="entrants"/>
+         </column>
+         <primaryKey column="entrant_id" sequenceNumberInPK="1"/>
+         <index name="residents_pkey" unique="true">
+            <column ascending="true" name="entrant_id"/>
+         </index>
+      </table>
+      <table name="service_employees" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="entrant_id" nullable="false" remarks="" size="10" type="int4">
+            <child column="entrant_id" foreignKey="works_for_entrant_id_fkey" implied="false" onDeleteCascade="false" table="works_for"/>
+            <parent column="entrant_id" foreignKey="service_employees_entrant_id_fkey" implied="false" onDeleteCascade="false" table="entrants"/>
+         </column>
+         <primaryKey column="entrant_id" sequenceNumberInPK="1"/>
+         <index name="service_employees_pkey" unique="true">
+            <column ascending="true" name="entrant_id"/>
+         </index>
+      </table>
+      <table name="service_providers" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="business_id" nullable="false" remarks="" size="10" type="int4">
+            <child column="business_id" foreignKey="provides_services_for_business_id_fkey" implied="false" onDeleteCascade="false" table="provides_services_for"/>
+            <child column="business_id" foreignKey="works_for_business_id_fkey" implied="false" onDeleteCascade="false" table="works_for"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="name" nullable="true" remarks="" size="40" type="bpchar"/>
+         <primaryKey column="business_id" sequenceNumberInPK="1"/>
+         <index name="service_providers_pkey" unique="true">
+            <column ascending="true" name="business_id"/>
+         </index>
+      </table>
+      <table name="units_within" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="unit_id" nullable="false" remarks="" size="6" type="bpchar">
+            <child column="unit_id" foreignKey="enters_unit_id_fkey" implied="false" onDeleteCascade="false" table="enters"/>
+            <child column="unit_id" foreignKey="owns_unit_id_fkey" implied="false" onDeleteCascade="false" table="owns"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="building_id" nullable="false" remarks="" size="10" type="int4">
+            <child column="building_id" foreignKey="enters_unit_id_fkey" implied="false" onDeleteCascade="false" table="enters"/>
+            <child column="building_id" foreignKey="owns_unit_id_fkey" implied="false" onDeleteCascade="false" table="owns"/>
+            <parent column="building_id" foreignKey="units_within_building_id_fkey" implied="false" onDeleteCascade="true" table="buildings"/>
+         </column>
+         <primaryKey column="unit_id" sequenceNumberInPK="1"/>
+         <primaryKey column="building_id" sequenceNumberInPK="2"/>
+         <index name="units_within_pkey" unique="true">
+            <column ascending="true" name="unit_id"/>
+            <column ascending="true" name="building_id"/>
+         </index>
+      </table>
+      <table name="vehicles" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="state" nullable="false" remarks="" size="2" type="bpchar">
+            <child column="state" foreignKey="drives_state_fkey" implied="false" onDeleteCascade="false" table="drives"/>
+            <child column="state" foreignKey="occupies_state_fkey" implied="false" onDeleteCascade="false" table="occupies"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="plate_num" nullable="false" remarks="" size="10" type="bpchar">
+            <child column="plate_num" foreignKey="drives_state_fkey" implied="false" onDeleteCascade="false" table="drives"/>
+            <child column="plate_num" foreignKey="occupies_state_fkey" implied="false" onDeleteCascade="false" table="occupies"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="color" nullable="true" remarks="" size="15" type="bpchar"/>
+         <primaryKey column="state" sequenceNumberInPK="1"/>
+         <primaryKey column="plate_num" sequenceNumberInPK="2"/>
+         <index name="vehicles_pkey" unique="true">
+            <column ascending="true" name="state"/>
+            <column ascending="true" name="plate_num"/>
+         </index>
+      </table>
+      <table name="works_for" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="entrant_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="entrant_id" foreignKey="works_for_entrant_id_fkey" implied="false" onDeleteCascade="false" table="service_employees"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="business_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="business_id" foreignKey="works_for_business_id_fkey" implied="false" onDeleteCascade="false" table="service_providers"/>
+         </column>
+         <primaryKey column="entrant_id" sequenceNumberInPK="1"/>
+         <primaryKey column="business_id" sequenceNumberInPK="2"/>
+         <index name="works_for_pkey" unique="true">
+            <column ascending="true" name="entrant_id"/>
+            <column ascending="true" name="business_id"/>
          </index>
       </table>
    </tables>

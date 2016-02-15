@@ -1,11 +1,11 @@
-DROP TABLE if exists Entrants;
+DROP TABLE if exists Entrants CASCADE;
 CREATE TABLE Entrants (
 	entrant_id INTEGER,
 	name CHAR(40),
 	PRIMARY KEY (entrant_id)
 );
 
-DROP TABLE if exists Admins;
+DROP TABLE if exists Admins CASCADE;
 CREATE TABLE Admins ( --superclass is entrants
 	entrant_id INTEGER,
 	PRIMARY KEY (entrant_id),
@@ -20,38 +20,38 @@ CREATE TABLE Residents ( --superclass is entrants
 );
 
 DROP TABLE if exists Casual_Entrants;
-CREATE TABLE Casual_Entrants ( --superclass is entrants 
+CREATE TABLE Casual_Entrants ( --superclass is entrants
 	entrant_id INTEGER,
 	PRIMARY KEY (entrant_id),
 	FOREIGN KEY (entrant_id) REFERENCES Entrants
 );
 
 DROP TABLE if exists Guests;
-CREATE TABLE Guests ( --superclass is entrants 
+CREATE TABLE Guests ( --superclass is entrants
 	entrant_id INTEGER,
 	PRIMARY KEY (entrant_id),
 	FOREIGN KEY (entrant_id) REFERENCES Entrants
 );
 
-DROP TABLE if exists Service_Employees;
-CREATE TABLE Service_Employees ( --superclass is entrants 
+DROP TABLE if exists Service_Employees CASCADE;
+CREATE TABLE Service_Employees ( --superclass is entrants
 	entrant_id INTEGER,
 	PRIMARY KEY (entrant_id),
 	FOREIGN KEY (entrant_id) REFERENCES Entrants
 );
 
-DROP TABLE if exists Buildings;
+DROP TABLE if exists Buildings CASCADE;
 CREATE TABLE Buildings (
 	building_id INTEGER,
 	name CHAR(40),
 	PRIMARY KEY (building_id)
 );
 
-DROP TABLE if exists Service_Providers;
+DROP TABLE if exists Service_Providers CASCADE;
 CREATE TABLE Service_Providers (
 	business_id INTEGER,
 	name CHAR(40),
-	PRIMARY KEY (id)
+	PRIMARY KEY (business_id)
 );
 
 DROP TABLE if exists Works_For;
@@ -61,7 +61,7 @@ CREATE TABLE Works_For (
 	PRIMARY KEY (entrant_id, business_id),
 	FOREIGN KEY (entrant_id) REFERENCES Service_Employees,
 	FOREIGN KEY (business_id) REFERENCES Service_Providers
-)
+);
 
 DROP TABLE if exists Administers;
 CREATE TABLE Administers (
@@ -70,9 +70,9 @@ CREATE TABLE Administers (
 	PRIMARY KEY (entrant_id, building_id),
 	FOREIGN KEY (entrant_id) REFERENCES Admins,
 	FOREIGN KEY (building_id) REFERENCES Buildings
-)
+);
 
-DROP TABLE if exists Vehicles;
+DROP TABLE if exists Vehicles CASCADE;
 CREATE TABLE Vehicles (
 	state CHAR (2),
 	plate_num CHAR(10),
@@ -108,20 +108,20 @@ CREATE TABLE Drives (
 	FOREIGN KEY (state, plate_num) REFERENCES Vehicles
 );
 
-DROP TABLE if exists Units_Within;
+DROP TABLE if exists Units_Within CASCADE;
 CREATE TABLE Units_Within ( -- unit within a building
 	unit_id CHAR(6),
 	building_id INTEGER NOT NULL,
 	PRIMARY KEY (unit_id, building_id),
-	FOREIGN KEY (building_id) REFERENCES Buildings, ON DELETE CASCADE
+	FOREIGN KEY (building_id) REFERENCES Buildings ON DELETE CASCADE
 );
 
-DROP TABLE if exists Parking_Spots_Within;
+DROP TABLE if exists Parking_Spots_Within CASCADE;
 CREATE TABLE Parking_Spots_Within ( -- parking spots within a building
 	spot_number INTEGER,
 	building_id INTEGER NOT NULL,
 	PRIMARY KEY (spot_number, building_id),
-	FOREIGN KEY (building_id) REFERENCES Buildings, ON DELETE CASCADE
+	FOREIGN KEY (building_id) REFERENCES Buildings ON DELETE CASCADE
 );
 
 DROP TABLE if exists Enters;
@@ -132,7 +132,7 @@ CREATE TABLE Enters ( -- The unit which a particular entrant is entering (or a r
 	PRIMARY KEY (entrant_id, unit_id, building_id),
 	FOREIGN KEY (entrant_id) REFERENCES Entrants,
 	FOREIGN KEY (unit_id, building_id) REFERENCES Units_Within
-)
+);
 
 DROP TABLE if exists Owns;
 CREATE TABLE Owns ( -- parking spot owned by a unit
@@ -141,7 +141,7 @@ CREATE TABLE Owns ( -- parking spot owned by a unit
 	building_id INTEGER,
 	PRIMARY KEY (unit_id, building_id, spot_number),
 	FOREIGN KEY (unit_id, building_id) REFERENCES Units_Within,
-	FOREIGN KEY (spot_number, building_id) REFERENCES Parking_Spots_Within,
+	FOREIGN KEY (spot_number, building_id) REFERENCES Parking_Spots_Within
 );
 
 DROP TABLE if exists Occupies;
@@ -151,6 +151,6 @@ CREATE TABLE Occupies ( -- vehicle occupying a parking spot
 	state CHAR(2),
 	plate_num CHAR(10),
 	PRIMARY KEY (spot_number, building_id, state, plate_num),
-	FOREIGN KEY (unit_id, building_id) REFERENCES Units_Within,
+	FOREIGN KEY (state, plate_num) REFERENCES Vehicles,
 	FOREIGN KEY (spot_number, building_id) REFERENCES Parking_Spots_Within
-)
+);
