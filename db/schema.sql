@@ -1,11 +1,11 @@
 DROP TABLE if exists entrants CASCADE;
 CREATE TABLE entrants (
 	entrant_id INTEGER,
-	fname CHAR(40),
-	lname CHAR(40),
-	username CHAR(20),
-	password CHAR(20),
+	fname VARCHAR(40),
+	lname VARCHAR(40),
 	age INTEGER,
+	username VARCHAR(20),
+	password VARCHAR(20),
 	UNIQUE (username),
 	phone_num VARCHAR(12),
 	PRIMARY KEY (entrant_id)
@@ -30,8 +30,10 @@ CREATE TABLE service_employees ( --superclass is entrants
 DROP TABLE if exists buildings CASCADE;
 CREATE TABLE buildings (
 	building_id INTEGER,
+	building_name VARCHAR(40),
 	phone_num VARCHAR(12),
 	street_address VARCHAR(120),
+	city VARCHAR(30),
 	state VARCHAR(2),
 	zip_code INTEGER,
 	email VARCHAR(120),
@@ -49,7 +51,7 @@ CREATE TABLE service_providers (
 );
 
 DROP TABLE if exists works_for;
-CREATE TABLE works_For (
+CREATE TABLE works_for (
 	entrant_id INTEGER,
 	business_id INTEGER,
 	PRIMARY KEY (entrant_id, business_id),
