@@ -49,6 +49,7 @@ digraph ERDiagram{
 	{
 		edge[arrowtail=none, arrowhead=none]
 		{node[label=<<u>entrant_id</u>>]entrant_id}->entrants
+		password->entrants
 		fname->entrants
 		lname->entrants
 		username->entrants
