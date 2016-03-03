@@ -3,8 +3,11 @@ CREATE TABLE entrants (
 	entrant_id INTEGER,
 	fname CHAR(40),
 	lname CHAR(40),
+	username CHAR(20),
+	password CHAR(20),
 	age INTEGER,
 	phone_num INTEGER,
+	UNIQUE (username),
 	PRIMARY KEY (entrant_id)
 );
 
@@ -13,6 +16,7 @@ CREATE TABLE admins ( --superclass is entrants
 	entrant_id INTEGER,
 	PRIMARY KEY (entrant_id),
 	FOREIGN KEY (entrant_id) REFERENCES entrants
+							 ON DELETE CASCADE
 );
 
 DROP TABLE if exists service_employees CASCADE;
@@ -20,6 +24,7 @@ CREATE TABLE service_employees ( --superclass is entrants
 	entrant_id INTEGER,
 	PRIMARY KEY (entrant_id),
 	FOREIGN KEY (entrant_id) REFERENCES entrants
+							 ON DELETE CASCADE
 );
 
 DROP TABLE if exists buildings CASCADE;
@@ -48,8 +53,10 @@ CREATE TABLE works_For (
 	entrant_id INTEGER,
 	business_id INTEGER,
 	PRIMARY KEY (entrant_id, business_id),
-	FOREIGN KEY (entrant_id) REFERENCES service_employees,
+	FOREIGN KEY (entrant_id) REFERENCES service_employees
+							 ON DELETE CASCADE,
 	FOREIGN KEY (business_id) REFERENCES service_providers
+							  ON DELETE CASCADE
 );
 
 DROP TABLE if exists administers;
@@ -58,8 +65,10 @@ CREATE TABLE administers (
 	building_id INTEGER,
 	privilege_level char(25),
 	PRIMARY KEY (entrant_id, building_id),
-	FOREIGN KEY (entrant_id) REFERENCES admins,
+	FOREIGN KEY (entrant_id) REFERENCES admins
+							 ON DELETE CASCADE,
 	FOREIGN KEY (building_id) REFERENCES buildings
+							  ON DELETE CASCADE
 );
 
 DROP TABLE if exists parking_spots CASCADE;
@@ -93,8 +102,10 @@ CREATE TABLE of_a ( -- Entrant of a building
 	building_id INTEGER,
 	entrant_id INTEGER,
 	PRIMARY KEY (building_id, entrant_id),
-	FOREIGN KEY (entrant_id) REFERENCES entrants,
+	FOREIGN KEY (entrant_id) REFERENCES entrants
+							 ON DELETE CASCADE,
 	FOREIGN KEY (building_id) REFERENCES buildings
+							  ON DELETE CASCADE
 );
 
 DROP TABLE if exists provides_services_for;
@@ -102,8 +113,10 @@ CREATE TABLE provides_services_for ( -- buildings that service providers provide
 	business_id INTEGER,
 	building_id INTEGER,
 	PRIMARY KEY (business_id, building_id),
-	FOREIGN KEY (business_id) REFERENCES service_providers,
+	FOREIGN KEY (business_id) REFERENCES service_providers
+							  ON DELETE CASCADE,
 	FOREIGN KEY (building_id) REFERENCES buildings
+							  ON DELETE CASCADE
 );
 
 DROP TABLE if exists drives;
@@ -112,8 +125,10 @@ CREATE TABLE drives (
 	state CHAR (2),
 	plate_num CHAR(10),
 	PRIMARY KEY (entrant_id, state, plate_num),
-	FOREIGN KEY (entrant_id) REFERENCES entrants,
+	FOREIGN KEY (entrant_id) REFERENCES entrants
+						     ON DELETE CASCADE,
 	FOREIGN KEY (state, plate_num) REFERENCES vehicles
+								   ON DELETE CASCADE
 );
 
 DROP TABLE if exists units CASCADE;
@@ -132,8 +147,10 @@ CREATE TABLE unit_entrants ( --superclass is entrants
 	unit_id CHAR(6) NOT NULL,
 	building_id INTEGER NOT NULL,
 	PRIMARY KEY (entrant_id),
-	FOREIGN KEY (entrant_id) REFERENCES entrants,
+	FOREIGN KEY (entrant_id) REFERENCES entrants
+						     ON DELETE CASCADE,
 	FOREIGN KEY (unit_id, building_id) REFERENCES units
+									   ON DELETE CASCADE
 );
 
 DROP TABLE if exists residents;
@@ -141,6 +158,7 @@ CREATE TABLE residents ( --superclass is unit entrants
 	entrant_id INTEGER,
 	PRIMARY KEY (entrant_id),
 	FOREIGN KEY (entrant_id) REFERENCES unit_entrants
+							 ON DELETE CASCADE
 );
 
 DROP TABLE if exists casual_entrants;
@@ -148,6 +166,7 @@ CREATE TABLE casual_entrants ( --superclass is unit entrants
 	entrant_id INTEGER,
 	PRIMARY KEY (entrant_id),
 	FOREIGN KEY (entrant_id) REFERENCES unit_entrants
+							 ON DELETE CASCADE
 );
 
 DROP TABLE if exists guests;
@@ -155,6 +174,7 @@ CREATE TABLE guests ( --superclass is unit entrants
 	entrant_id INTEGER,
 	PRIMARY KEY (entrant_id),
 	FOREIGN KEY (entrant_id) REFERENCES unit_entrants
+							 ON DELETE CASCADE
 );
 
 DROP TABLE if exists owns;
@@ -163,6 +183,8 @@ CREATE TABLE owns ( -- parking spot owned by a unit
 	spot_number INTEGER,
 	building_id INTEGER,
 	PRIMARY KEY (unit_id, building_id, spot_number),
-	FOREIGN KEY (unit_id, building_id) REFERENCES units,
+	FOREIGN KEY (unit_id, building_id) REFERENCES units
+									   ON DELETE CASCADE,
 	FOREIGN KEY (spot_number, building_id) REFERENCES parking_spots
+										   ON DELETE CASCADE
 );
