@@ -1,10 +1,10 @@
 DROP TABLE if exists entrants CASCADE;
 CREATE TABLE entrants (
 	entrant_id INTEGER,
-	fname CHAR(40),
-	lname CHAR(40),
+	fname VARCHAR(40),
+	lname VARCHAR(40),
 	age INTEGER,
-	phone_num INTEGER,
+	phone_num VARCHAR(12),
 	PRIMARY KEY (entrant_id)
 );
 
@@ -25,21 +25,21 @@ CREATE TABLE service_employees ( --superclass is entrants
 DROP TABLE if exists buildings CASCADE;
 CREATE TABLE buildings (
 	building_id INTEGER,
-	phone_num INTEGER,
-	street_address CHAR(120),
-	state CHAR(2),
+	phone_num VARCHAR(12),
+	street_address VARCHAR(120),
+	state VARCHAR(2),
 	zip_code INTEGER,
-	email CHAR(120),
+	email VARCHAR(120),
 	PRIMARY KEY (building_id)
 );
 
 DROP TABLE if exists service_providers CASCADE;
 CREATE TABLE service_providers (
 	business_id INTEGER,
-	business_name CHAR(120),
-	business_description CHAR(1000),
-	phone_num INTEGER,
-	email CHAR(120),
+	business_name VARCHAR(120),
+	business_description VARCHAR(1000),
+	phone_num VARCHAR(12),
+	email VARCHAR(120),
 	PRIMARY KEY (business_id)
 );
 
@@ -66,18 +66,18 @@ DROP TABLE if exists parking_spots CASCADE;
 CREATE TABLE parking_spots ( -- parking spots within a building
 	spot_number INTEGER,
 	building_id INTEGER,
-	spot_type CHAR(20), -- Temporary? Permanent? Unloading zone?
+	spot_type VARCHAR(20), -- Temporary? Permanent? Unloading zone?
 	PRIMARY KEY (spot_number, building_id),
 	FOREIGN KEY (building_id) REFERENCES buildings ON DELETE CASCADE
 );
 
 DROP TABLE if exists vehicles CASCADE;
 CREATE TABLE vehicles (
-	state CHAR (2),
-	plate_num CHAR(10),
-	make CHAR(30),
-	model CHAR(30),
-	color CHAR(15),
+	state VARCHAR (2),
+	plate_num VARCHAR(10),
+	make VARCHAR(30),
+	model VARCHAR(30),
+	color VARCHAR(15),
 	is_requested BOOLEAN,
 	key_number INTEGER,
 	spot_number INTEGER,
@@ -109,8 +109,8 @@ CREATE TABLE provides_services_for ( -- buildings that service providers provide
 DROP TABLE if exists drives;
 CREATE TABLE drives (
 	entrant_id INTEGER,
-	state CHAR (2),
-	plate_num CHAR(10),
+	state VARCHAR (2),
+	plate_num VARCHAR(10),
 	PRIMARY KEY (entrant_id, state, plate_num),
 	FOREIGN KEY (entrant_id) REFERENCES entrants,
 	FOREIGN KEY (state, plate_num) REFERENCES vehicles
@@ -118,7 +118,7 @@ CREATE TABLE drives (
 
 DROP TABLE if exists units CASCADE;
 CREATE TABLE units ( -- unit within a building
-	unit_id CHAR(6),
+	unit_id VARCHAR(6),
 	floor INTEGER,
 	building_id INTEGER,
 	PRIMARY KEY (unit_id, building_id),
@@ -129,7 +129,7 @@ DROP TABLE if exists unit_entrants CASCADE;
 CREATE TABLE unit_entrants ( --superclass is entrants
 							 --combined with Enters relationship set
 	entrant_id INTEGER,
-	unit_id CHAR(6) NOT NULL,
+	unit_id VARCHAR(6) NOT NULL,
 	building_id INTEGER NOT NULL,
 	PRIMARY KEY (entrant_id),
 	FOREIGN KEY (entrant_id) REFERENCES entrants,
@@ -159,7 +159,7 @@ CREATE TABLE guests ( --superclass is unit entrants
 
 DROP TABLE if exists owns;
 CREATE TABLE owns ( -- parking spot owned by a unit
-	unit_id CHAR(6),
+	unit_id VARCHAR(6),
 	spot_number INTEGER,
 	building_id INTEGER,
 	PRIMARY KEY (unit_id, building_id, spot_number),
