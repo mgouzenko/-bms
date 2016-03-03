@@ -19,3 +19,11 @@ psql -U mag2272 -h w4111a.eastus.cloudapp.azure.com proj1part2 \
 # service_providers
 psql -U mag2272 -h w4111a.eastus.cloudapp.azure.com proj1part2 \
 	-c "copy service_providers from STDIN with delimiter as ','" < ./db/example_data/service_providers.csv
+
+# works_for
+psql -U mag2272 -h w4111a.eastus.cloudapp.azure.com proj1part2 \
+	-c "copy works_for from STDIN with delimiter as ','" < ./db/example_data/works_for.csv
+
+# administers
+psql -U mag2272 -h w4111a.eastus.cloudapp.azure.com proj1part2 \
+	-c "copy administers from STDIN with delimiter as ','" < ./db/example_data/administers.csv

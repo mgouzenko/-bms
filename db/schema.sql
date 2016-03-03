@@ -65,7 +65,7 @@ DROP TABLE if exists administers;
 CREATE TABLE administers (
 	entrant_id INTEGER,
 	building_id INTEGER,
-	privilege_level char(25),
+	role char(25),
 	PRIMARY KEY (entrant_id, building_id),
 	FOREIGN KEY (entrant_id) REFERENCES admins
 							 ON DELETE CASCADE,
