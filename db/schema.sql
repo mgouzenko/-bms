@@ -3,7 +3,7 @@ CREATE TABLE entrants (
 	entrant_id INTEGER,
 	fname VARCHAR(40),
 	lname VARCHAR(40),
-	age INTEGER,
+	age INTEGER check (age >= 0),
 	username VARCHAR(20),
 	password VARCHAR(20),
 	UNIQUE (username),
@@ -35,7 +35,7 @@ CREATE TABLE buildings (
 	street_address VARCHAR(120),
 	city VARCHAR(30),
 	state VARCHAR(2),
-	zip_code INTEGER,
+	zip_code VARCHAR(5),
 	email VARCHAR(120),
 	PRIMARY KEY (building_id)
 );
@@ -65,7 +65,11 @@ DROP TABLE if exists administers;
 CREATE TABLE administers (
 	entrant_id INTEGER,
 	building_id INTEGER,
-	role char(25),
+	role char(25) check (role = 'Concierge' OR
+						 role = 'Valet' OR
+						 role = 'Delivery' OR
+						 role = 'Maintenance' OR
+						 role = 'Clerical'),
 	PRIMARY KEY (entrant_id, building_id),
 	FOREIGN KEY (entrant_id) REFERENCES admins
 							 ON DELETE CASCADE,
@@ -77,7 +81,9 @@ DROP TABLE if exists parking_spots CASCADE;
 CREATE TABLE parking_spots ( -- parking spots within a building
 	spot_number INTEGER,
 	building_id INTEGER,
-	spot_type VARCHAR(20), -- Temporary? Permanent? Unloading zone?
+	spot_type VARCHAR(20) check (spot_type = 'Permanent' OR
+								 spot_type = 'Temporary' OR
+								 spot_type = 'Unloading'),
 	PRIMARY KEY (spot_number, building_id),
 	FOREIGN KEY (building_id) REFERENCES buildings ON DELETE CASCADE
 );
@@ -111,7 +117,7 @@ CREATE TABLE of_a ( -- Entrant of a building
 );
 
 DROP TABLE if exists provides_services_for;
-CREATE TABLE provides_services_for ( -- buildings that service providers provide)
+CREATE TABLE provides_services_for ( -- buildings that service providers work in
 	business_id INTEGER,
 	building_id INTEGER,
 	PRIMARY KEY (business_id, building_id),
@@ -136,7 +142,7 @@ CREATE TABLE drives (
 DROP TABLE if exists units CASCADE;
 CREATE TABLE units ( -- unit within a building
 	unit_id VARCHAR(6),
-	floor INTEGER,
+	floor INTEGER check (floor >= 0 AND floor < 200),
 	building_id INTEGER,
 	PRIMARY KEY (unit_id, building_id),
 	FOREIGN KEY (building_id) REFERENCES buildings ON DELETE CASCADE
