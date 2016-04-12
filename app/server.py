@@ -1,23 +1,10 @@
 #!/usr/bin/env python2.7
-
-"""
-Columbia's COMS W4111.001 Introduction to Databases
-Example Webserver
-
-To run locally:
-
-    python server.py
-
-Go to http://localhost:8111 in your browser.
-
-A debugger such as "pdb" may be helpful for debugging.
-Read about it online.
-"""
-
 import os
 from sqlalchemy import *
 from sqlalchemy.pool import NullPool
-from flask import Flask, request, render_template, g, redirect, Response
+from flask import Flask, request, render_template, g, redirect, Response, make_response
+
+from models import entrants, residents
 
 tmpl_dir = os.path.join(
     os.path.dirname(
@@ -97,11 +84,27 @@ def add():
     return redirect('/')
 
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
+@app.route('/login/<entity_type>', methods=['GET', 'POST'])
+def login(entity_type):
+    if request.cookies.get('user_id'):
+        return redirect('/dashboard')
     if request.method == 'POST':
-        print 'meow'
+        username = request.form.get('username')
+        entrant = entrants.find_user(username, g.conn) if username else None
+        if entrant:
+            resp = make_response(redirect('/dashboard'))
+            resp.set_cookie('user_id', value=str(entrant.id))
+            resp.set_cookie('entity_type', entity_type)
+            return resp
     return render_template('login.html')
+
+@app.route('/dashboard/')
+def display_dashboard():
+    user_id = request.cookies.get('user_id')
+    if user_id is None:
+        return redirect('/')
+    resident = residents.find_by_id(user_id, g.conn)
+    return "welcome" + resident.fname
 
 @app.route('/<int:provider_id>/service_provider_dashboard', methods=['GET', 'POST'])
 def sp_dashboard(provider_id):
