@@ -108,8 +108,6 @@ def display_dashboard():
 
 @app.route('/<int:provider_id>/service_provider_dashboard', methods=['GET', 'POST'])
 def sp_dashboard(provider_id):
-    if request.method == 'POST':
-        print 'meow'
 
     # Verify that we are logged in as a service provider.
     business_cursor = g.conn.execute(
