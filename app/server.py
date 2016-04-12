@@ -4,7 +4,7 @@ from sqlalchemy import *
 from sqlalchemy.pool import NullPool
 from flask import Flask, request, render_template, g, redirect, Response, make_response
 
-from models import entrants, residents
+from models import entrants, residents, vehicles
 
 tmpl_dir = os.path.join(
     os.path.dirname(
@@ -137,6 +137,52 @@ def display_dashboard(user_id, dash_type):
                 entity_type="Resident")
 
     return redirect('/')
+
+@app.route('/car/<state>/<license_plate>/', methods=['GET', 'POST'])
+def car(state, license_plate):
+    if request.method == 'POST':
+        print 'unimplemented'
+
+    car = vehicles.find_by_license_plate(g.conn, state, license_plate)
+
+    if(car != None):
+        return render_template('edit_car.html', car=car)
+    else:
+        return render_template('error.html', error_desc="That car was not found.")
+
+@app.route('/car/<state>/<license_plate>/update_car', methods=['POST'])
+def update_car(state, license_plate):
+    # Update the database based on the form data
+    g.conn.execute(
+        'UPDATE vehicles\
+         SET make = \'' + request.form["make"] + '\'\
+         WHERE state = \'' + str(state) + '\' AND plate_num = \'' + str(license_plate) + '\'')
+
+    g.conn.execute(
+        'UPDATE vehicles\
+         SET model = \'' + request.form["model"] + '\'\
+         WHERE state = \'' + str(state) + '\' AND plate_num = \'' + str(license_plate) + '\'')
+
+    g.conn.execute(
+        'UPDATE vehicles\
+         SET color = \'' + request.form["color"] + '\'\
+         WHERE state = \'' + str(state) + '\' AND plate_num = \'' + str(license_plate) + '\'')
+
+    if(request.form["default_spot"] != None and request.form["default_spot"] != ""):
+        g.conn.execute(
+            'UPDATE vehicles\
+             SET default_spot = \'' + request.form["default_spot"] + '\'\
+             WHERE state = \'' + str(state) + '\' AND plate_num = \'' + str(license_plate) + '\'')
+    else:
+        g.conn.execute(
+            'UPDATE vehicles\
+             SET default_spot = NULL \
+             WHERE state = \'' + str(state) + '\' AND plate_num = \'' + str(license_plate) + '\'')
+
+
+    print license_plate
+    return redirect('/car/' + state + '/' + license_plate)
+
 
 @app.route('/<int:provider_id>/business_dashboard', methods=['GET', 'POST'])
 def business_dashboard(provider_id):
