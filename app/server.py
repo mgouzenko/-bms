@@ -67,7 +67,7 @@ def index():
 
     See its API: http://flask.pocoo.org/docs/0.10/api/#incoming-request-data
     """
-    return "hello world"
+    return render_template('home.html')
 
 
 @app.route('/another')
@@ -86,8 +86,9 @@ def add():
 
 @app.route('/login/<entity_type>', methods=['GET', 'POST'])
 def login(entity_type):
-    if request.cookies.get('user_id'):
-        return redirect('/dashboard')
+    user_id = request.cookies.get('user_id')
+    if user_id:
+        return redirect('/resident_dashboard/{}'.format(user_id))
     if request.method == 'POST':
         username = request.form.get('username')
         entrant = entrants.find_by_username(username, g.conn) if username else None
