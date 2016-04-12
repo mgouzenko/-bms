@@ -128,8 +128,36 @@ def display_dashboard(user_id, dash_type):
 
     return redirect('/')
 
-@app.route('/<int:provider_id>/service_provider_dashboard', methods=['GET', 'POST'])
-def sp_dashboard(provider_id):
+@app.route('/<int:provider_id>/business_dashboard', methods=['GET', 'POST'])
+def business_dashboard(provider_id):
+    if request.method == 'POST':
+
+        # Update the database based on the form data
+        g.conn.execute(
+            'UPDATE service_providers\
+             SET business_description = \'' + request.form["description"] + '\'\
+             WHERE business_id = ' + str(provider_id))
+
+        g.conn.execute(
+            'UPDATE service_providers\
+             SET email = \'' + request.form["email"] + '\'\
+             WHERE business_id = ' + str(provider_id))
+
+        g.conn.execute(
+            'UPDATE service_providers\
+             SET phone_num = \'' + request.form["phone_num"] + '\'\
+             WHERE business_id = ' + str(provider_id))
+
+        # Clear the serviced buildings for this particular business
+        g.conn.execute(
+            'DELETE FROM ONLY provides_services_for AS psf\
+             WHERE psf.business_id = ' + str(provider_id))
+
+        # Add the selected buildings to the list of buildings that this business services
+        for serviced_building in request.form.getlist("building"):
+            g.conn.execute(
+                'INSERT INTO provides_services_for (business_id, building_id) VALUES\
+                 (' + str(provider_id) + ", " + str(serviced_building) + ")")
 
     # Verify that we are logged in as a service provider.
     business_cursor = g.conn.execute(
@@ -164,7 +192,7 @@ def sp_dashboard(provider_id):
             buildings.append(building_entry)
 
         cur_description = "This is the description currently in the database."
-        return render_template('sp_dashboard.html', buildings=buildings, business=business)
+        return render_template('business_dashboard.html', buildings=buildings, business=business)
     else:
         return render_template('error.html', error_desc="This user is not a business.")
 
