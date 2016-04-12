@@ -97,8 +97,10 @@ def add():
     return redirect('/')
 
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
+    if request.method == 'POST':
+        print 'meow'
     return render_template('login.html')
 
 if __name__ == "__main__":
