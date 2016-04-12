@@ -1,6 +1,6 @@
 DROP TABLE if exists entrants CASCADE;
 CREATE TABLE entrants (
-	entrant_id INTEGER,
+	entrant_id SERIAL,
 	fname VARCHAR(40),
 	lname VARCHAR(40),
 	age INTEGER check (age >= 0),
