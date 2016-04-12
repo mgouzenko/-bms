@@ -103,6 +103,48 @@ def login():
         print 'meow'
     return render_template('login.html')
 
+@app.route('/<int:provider_id>/service_provider_dashboard', methods=['GET', 'POST'])
+def sp_dashboard(provider_id):
+    if request.method == 'POST':
+        print 'meow'
+
+    # Verify that we are logged in as a service provider.
+    business_cursor = g.conn.execute(
+        'SELECT sp.business_id, sp.business_name, sp.business_description, sp.phone_num, sp.email \
+         FROM service_providers sp \
+         WHERE sp.business_id = ' + str(provider_id))
+
+    business = business_cursor.fetchone()
+
+    if (business != None):
+        buildings_cursor = g.conn.execute(
+            'SELECT buildings.building_name, buildings.building_id \
+             FROM buildings')
+
+        buildings = []
+
+        for record in buildings_cursor:
+
+            check_service_cursor = g.conn.execute(
+                'SELECT psf.business_id, psf.building_id \
+                 FROM provides_services_for psf \
+                 WHERE psf.business_id = ' 
+                + str(business.business_id) + "AND psf.building_id = " + str(record.building_id))
+
+            building_entry = dict(record)
+
+            if(check_service_cursor.fetchone() != None):
+                building_entry['service_available'] = "checked"
+            else:
+                building_entry['service_available'] = ""
+
+            buildings.append(building_entry)
+
+        cur_description = "This is the description currently in the database."
+        return render_template('sp_dashboard.html', buildings=buildings, business=business)
+    else:
+        return render_template('error.html', error_desc="This user is not a business.")
+
 if __name__ == "__main__":
     import click
 
