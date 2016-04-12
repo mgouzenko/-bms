@@ -1,0 +1,37 @@
+{% macro display_cars(cars) -%}
+<div class="container">
+	<form>
+		<div class="form-group">
+			<label class="control-label col-sm-4" for="description">
+				Cars:
+			</label>
+
+			<div class="col-sm-offset-1 col-sm-11">
+				{% for car in cars %}
+				<div class="well">
+					<h4> {{car.make}} {{car.model}} </h4>
+					<label> License Plate No: </label> {{ car.plate_num}} <br>
+					<label> Color: </label> {{ car.color }} <br>
+					<label>	Drivers: </label>
+					<ul>
+						{% for driver in car.drivers %}
+							<li> {{ driver.fname }} </li>
+						{% endfor %}
+					</ul>
+					<label class="active">
+						<input type="checkbox" name="cars" value="{{car.plate_num}} {{car.state}}" {% if car.is_requested %} checked {% endif %}>
+					</label>
+				</div>
+				{% endfor %}
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-1 col-sm-10">
+			  		<button type="submit" class="btn btn-primary">
+						Update Requests
+					</button>
+        		</div>
+      		</div>
+		</div>
+	</form>
+</div>
+{%- endmacro %}

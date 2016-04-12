@@ -1,0 +1,13 @@
+{% import 'cars_macro.html' as cars_macro %}
+{% extends "dashboard_base.html" %}
+{% block body %}
+	{{ cars_macro.display_cars(cars) }}
+{% endblock %}
+
+{% block js_hooks %}
+<script>
+	$.fn.bootstrapSwitch.defaults.onText = 'Requested';
+	$.fn.bootstrapSwitch.defaults.offText = 'Idle';
+	$("[type='checkbox']").bootstrapSwitch();
+</script>
+{% endblock %}

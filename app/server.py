@@ -98,7 +98,10 @@ def login(entity_type):
             return resp
     return render_template('login.html')
 
-@app.route('/resident_dashboard/<user_id>', defaults={'dash_type': 'guests'})
+@app.route('/resident_dashboard/<user_id>')
+def route_to_guests(user_id):
+    return redirect('/resident_dashboard/{}/guests'.format(user_id))
+
 @app.route('/resident_dashboard/<user_id>/<dash_type>')
 def display_dashboard(user_id, dash_type):
     entity_type = request.cookies.get('entity_type')
@@ -116,40 +119,17 @@ def display_dashboard(user_id, dash_type):
 
     elif dash_type == 'cars':
         cars = resident.get_cars(g.conn)
-        return 'meow'
+        map(lambda c: c.get_drivers(g.conn), cars)
+        return render_template(
+                'resident_dashboard_cars.html',
+                resident=resident,
+                cars=cars,
+                entity_type="Resident")
 
     return redirect('/')
 
 @app.route('/<int:provider_id>/service_provider_dashboard', methods=['GET', 'POST'])
 def sp_dashboard(provider_id):
-    if request.method == 'POST':
-
-        # Update the database based on the form data
-        g.conn.execute(
-            'UPDATE service_providers\
-             SET business_description = \'' + request.form["description"] + '\'\
-             WHERE business_id = ' + str(provider_id))
-
-        g.conn.execute(
-            'UPDATE service_providers\
-             SET email = \'' + request.form["email"] + '\'\
-             WHERE business_id = ' + str(provider_id))
-
-        g.conn.execute(
-            'UPDATE service_providers\
-             SET phone_num = \'' + request.form["phone_num"] + '\'\
-             WHERE business_id = ' + str(provider_id))
-
-        # Clear the serviced buildings for this particular business
-        g.conn.execute(
-            'DELETE FROM ONLY provides_services_for AS psf\
-             WHERE psf.business_id = ' + str(provider_id))
-
-        # Add the selected buildings to the list of buildings that this business services
-        for serviced_building in request.form.getlist("building"):
-            g.conn.execute(
-                'INSERT INTO provides_services_for (business_id, building_id) VALUES\
-                 (' + str(provider_id) + ", " + str(serviced_building) + ")")
 
     # Verify that we are logged in as a service provider.
     business_cursor = g.conn.execute(
