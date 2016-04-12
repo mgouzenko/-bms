@@ -90,7 +90,7 @@ def login(entity_type):
         return redirect('/dashboard')
     if request.method == 'POST':
         username = request.form.get('username')
-        entrant = entrants.find_user(username, g.conn) if username else None
+        entrant = entrants.find_by_username(username, g.conn) if username else None
         if entrant:
             resp = make_response(redirect('/dashboard'))
             resp.set_cookie('user_id', value=str(entrant.id))
@@ -98,13 +98,27 @@ def login(entity_type):
             return resp
     return render_template('login.html')
 
-@app.route('/dashboard/')
-def display_dashboard():
-    user_id = request.cookies.get('user_id')
-    if user_id is None:
+@app.route('/resident_dashboard/<user_id>', defaults={'dash_type': 'guests'})
+@app.route('/resident_dashboard/<user_id>/<dash_type>')
+def display_dashboard(user_id, dash_type):
+    entity_type = request.cookies.get('entity_type')
+    if user_id != request.cookies.get('user_id') and entity_type != 'residents':
         return redirect('/')
     resident = residents.find_by_id(user_id, g.conn)
-    return "welcome" + resident.fname
+
+    if dash_type == 'guests':
+        guests = resident.get_guests(g.conn)
+        return render_template(
+                'resident_dashboard_guests.html',
+                resident=resident,
+                guests=guests,
+                entity_type="Resident")
+
+    elif dash_type == 'cars':
+        cars = resident.get_cars(g.conn)
+        return 'meow'
+
+    return redirect('/')
 
 @app.route('/<int:provider_id>/service_provider_dashboard', methods=['GET', 'POST'])
 def sp_dashboard(provider_id):

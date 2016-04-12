@@ -1,5 +1,6 @@
 #!/bin/bash
 
+./load_schema.sh
 declare -a arr=("entrants" 					\
 				"admins" 					\
 				"service_employees"			\

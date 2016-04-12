@@ -1,0 +1,13 @@
+{% import 'guests_macro.html' as guests_macro %}
+{% extends "dashboard_base.html" %}
+{% block body %}
+	{{ guests_macro.display_guests(guests) }}
+{% endblock %}
+
+{% block js_hooks %}
+<script>
+	//$.fn.bootstrapSwitch.defaults.onText = ' ';
+	//$("[type='checkbox']").bootstrapSwitch();
+
+</script>
+{% endblock %}
