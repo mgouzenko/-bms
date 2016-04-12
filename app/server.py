@@ -91,13 +91,22 @@ def login(entity_type):
         return redirect('/resident_dashboard/{}'.format(user_id))
     if request.method == 'POST':
         username = request.form.get('username')
-        entrant = entrants.find_by_username(username, g.conn) if username else None
-        if entrant:
-            resp = make_response(redirect('/dashboard'))
-            resp.set_cookie('user_id', value=str(entrant.id))
+        resident = residents.find_by_username(username, g.conn) if username else None
+        if resident:
+            resp = make_response(
+                    redirect('/resident_dashboard/{}'.format(
+                        resident.entrant_id)))
+            resp.set_cookie('user_id', value=str(resident.entrant_id))
             resp.set_cookie('entity_type', entity_type)
             return resp
     return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    resp = make_response(redirect('/'))
+    resp.set_cookie('user_id', '', expires=0)
+    resp.set_cookie('entity_type', '', expires=0)
+    return resp
 
 @app.route('/resident_dashboard/<user_id>')
 def route_to_guests(user_id):
