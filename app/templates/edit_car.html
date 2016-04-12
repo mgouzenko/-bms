@@ -4,7 +4,7 @@
   <h1> Update or Park Car </h1>
   <h3> <em> Details for {{ car.state }} - {{ car.plate_num }}</em></h3>
   <br/>
-  <form action="update_car"method="POST" class="form-horizontal" role="form">
+  <form action="update_car" method="POST" class="form-horizontal" role="form">
     <!-- Car Make Input -->
     <div class="form-group">
       <label class="control-label col-sm-2" for="make">Car Make:</label>
@@ -47,7 +47,7 @@
 
   <h3> <em> Parking Information</em></h3>
   <br/>
-  <form method="POST" class="form-horizontal" role="form">
+  <form method="POST" action="park_car" class="form-horizontal" role="form">
 
     <!-- Current Parking Spot Input -->
     <div class="form-group">

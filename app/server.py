@@ -183,6 +183,19 @@ def update_car(state, license_plate):
     print license_plate
     return redirect('/car/' + state + '/' + license_plate)
 
+@app.route('/car/<state>/<license_plate>/park_car', methods=['POST'])
+def park_car(state, license_plate):
+    if(request.form["spot_number"] != None and request.form["spot_number"] != "" and request.form["key_number"] != None and request.form["key_number"] != ""):
+        g.conn.execute(
+            'UPDATE vehicles\
+             SET spot_number = \'' + request.form["spot_number"] + '\'\
+             WHERE state = \'' + str(state) + '\' AND plate_num = \'' + str(license_plate) + '\'')
+        g.conn.execute(
+            'UPDATE vehicles\
+             SET key_number = \'' + request.form["key_number"] + '\'\
+             WHERE state = \'' + str(state) + '\' AND plate_num = \'' + str(license_plate) + '\'')
+
+    return redirect('/car/' + state + '/' + license_plate)
 
 @app.route('/<int:provider_id>/business_dashboard', methods=['GET', 'POST'])
 def business_dashboard(provider_id):
