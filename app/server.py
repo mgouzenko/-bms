@@ -2,9 +2,9 @@
 import os
 from sqlalchemy import *
 from sqlalchemy.pool import NullPool
-from flask import Flask, request, render_template, g, redirect, Response, make_response
+from flask import Flask, request, render_template, g, redirect, Response, make_response, flash
 
-from models import entrants, residents
+from models import entrants, residents, service_providers, guests, admins
 
 tmpl_dir = os.path.join(
     os.path.dirname(
@@ -36,6 +36,32 @@ def before_request():
     """
     try:
         g.conn = engine.connect()
+
+        user_id = request.cookies.get('user_id')
+        entity_type = request.cookies.get('entity_type')
+
+        if user_id is None or entity_type is None:
+            g.user_id = None
+            g.entity_type = None
+        elif entity_type == 'residents':
+            if residents.find_by_id(user_id, g.conn) is None:
+                return redirect('/')
+        elif entity_type == 'businesses':
+            if service_providers.find_by_id(user_id, g.conn) is None:
+                return redirect('/')
+        elif entity_type == 'admins':
+            admin = admins.find_by_id(user_id, g.conn)
+            if admin is None:
+                return redirect('/')
+            g.building_id = admin.building_id
+        else:
+            g.user_id = None
+            g.entity_type = None
+            return redirect('/')
+
+        g.user_id = user_id
+        g.entity_type = entity_type
+
     except:
         print "uh oh, problem connecting to database"
         import traceback
@@ -86,20 +112,53 @@ def add():
 
 @app.route('/login/<entity_type>', methods=['GET', 'POST'])
 def login(entity_type):
-    user_id = request.cookies.get('user_id')
-    if user_id:
-        return redirect('/resident_dashboard/{}'.format(user_id))
-    if request.method == 'POST':
-        username = request.form.get('username')
-        resident = residents.find_by_username(username, g.conn) if username else None
-        if resident:
-            resp = make_response(
-                    redirect('/resident_dashboard/{}'.format(
-                        resident.entrant_id)))
-            resp.set_cookie('user_id', value=str(resident.entrant_id))
-            resp.set_cookie('entity_type', entity_type)
-            return resp
-    return render_template('login.html')
+    if g.user_id and g.entity_type:
+        if g.entity_type == 'businesses':
+            print '/{}/business_dashboard'.format(g.user_id)
+            return redirect('/{}/business_dashboard'.format(g.user_id))
+        elif g.entity_type == 'residents':
+            return redirect('/resident_dashboard/{}'.format(g.user_id))
+
+
+    if entity_type == 'residents':
+        if request.method == 'POST':
+            username = request.form.get('username')
+            resident = (residents.find_by_username(username, g.conn)
+                        if username else None)
+            if resident:
+                resp = make_response(
+                        redirect('/resident_dashboard/{}'.format(
+                            resident.entrant_id)))
+                resp.set_cookie('user_id', value=str(resident.entrant_id))
+                resp.set_cookie('entity_type', entity_type)
+                return resp
+
+    elif entity_type == 'admins':
+        if request.method == 'POST':
+            username = request.form.get('username')
+            admin = (admins.find_by_username(username, g.conn)
+                     if username else None)
+            if admin:
+                resp = make_response(
+                        redirect('/'))
+                resp.set_cookie('user_id', value=str(admin.entrant_id))
+                resp.set_cookie('entity_type', entity_type)
+                return resp
+
+    elif entity_type == 'businesses':
+        if request.method == 'POST':
+            email = request.form.get('username')
+            business = (service_providers.find_by_email(email, g.conn)
+                        if email else None)
+            if business:
+                resp = make_response(
+                        redirect('/{}/business_dashboard'.format(
+                            business.business_id)))
+                resp.set_cookie('user_id', value=str(business.business_id))
+                resp.set_cookie('entity_type', entity_type)
+                return resp
+
+    return render_template('login.html', entity_type=entity_type)
 
 @app.route('/logout')
 def logout():
@@ -112,20 +171,34 @@ def logout():
 def route_to_guests(user_id):
     return redirect('/resident_dashboard/{}/guests'.format(user_id))
 
-@app.route('/resident_dashboard/<user_id>/<dash_type>')
+@app.route('/resident_dashboard/<user_id>/<dash_type>', methods=['GET', 'POST'])
 def display_dashboard(user_id, dash_type):
-    entity_type = request.cookies.get('entity_type')
-    if user_id != request.cookies.get('user_id') and entity_type != 'residents':
+    if g.entity_type != 'residents' or g.user_id != user_id:
         return redirect('/')
     resident = residents.find_by_id(user_id, g.conn)
 
     if dash_type == 'guests':
-        guests = resident.get_guests(g.conn)
+        guests_of_resident = resident.get_guests(g.conn)
         return render_template(
                 'resident_dashboard_guests.html',
                 resident=resident,
-                guests=guests,
+                guests=guests_of_resident,
                 entity_type="Resident")
+
+    elif dash_type == 'add_guests':
+        if request.method == 'POST':
+            fname = request.form.get('fname')
+            lname = request.form.get('lname')
+            new_guest = guests(
+                    building_id=resident.building_id,
+                    unit_id=resident.unit_id,
+                    fname=fname,
+                    lname=lname)
+            new_guest.put(g.conn)
+            flash('Guest successfully added: {} {}'.format(fname, lname))
+        return render_template(
+                'resident_dashboard_add_guests.html',
+                resident=resident)
 
     elif dash_type == 'cars':
         cars = resident.get_cars(g.conn)
@@ -140,6 +213,9 @@ def display_dashboard(user_id, dash_type):
 
 @app.route('/<int:provider_id>/business_dashboard', methods=['GET', 'POST'])
 def business_dashboard(provider_id):
+    if g.user_id != str(provider_id) or g.entity_type != 'businesses':
+        return redirect('/')
+
     if request.method == 'POST':
 
         # Update the database based on the form data
@@ -229,6 +305,7 @@ if __name__ == "__main__":
 
         HOST, PORT = host, port
         print "running on %s:%d" % (HOST, PORT)
+        app.secret_key = "such a clever key"
         app.run(host=HOST, port=PORT, debug=debug, threaded=threaded)
 
     run()

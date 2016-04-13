@@ -46,7 +46,8 @@ CREATE TABLE service_providers (
 	business_name VARCHAR(120),
 	business_description VARCHAR(1000),
 	phone_num VARCHAR(12),
-	email VARCHAR(120),
+	email VARCHAR(120) NOT NULL,
+	UNIQUE(email),
 	PRIMARY KEY (business_id)
 );
 
