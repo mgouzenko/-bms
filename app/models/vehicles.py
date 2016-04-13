@@ -15,6 +15,26 @@ class vehicles(object):
         self.building_id = building_id
         self.drivers = None
 
+    def put(self, database_connection):
+        all_attrs = ['state', 'plate_num', 'make', 'model', 'color',
+                     'is_requested', 'key_number', 'spot_number',
+                     'default_spot', 'building_id']
+
+        put_attrs = [ attr for attr in all_attrs if attr is not None]
+        place_holders = map(lambda a: ':{}'.format(a), put_attrs)
+
+        colnames = ', '.join(put_attrs)
+        values = ', '.join(place_holders)
+
+        query = """INSERT INTO vehicles ({colnames})
+                   VALUES ({values})
+                   """.format(colnames=colnames, values=values)
+
+        real_values = { attr:getattr(self, attr) for attr in put_attrs}
+        database_connection.execute(
+                text(query),
+                **real_values)
+
     def request(self, database_connection, requested=True):
         self.is_requested = requested
         query = """UPDATE vehicles set is_requested = :req

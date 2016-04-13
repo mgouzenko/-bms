@@ -19,6 +19,16 @@
 			  <button type="submit" class="btn btn-primary">Search Entrants</button>
 			</div>
 		  </div>
+		  <div class="container">
+			  {% for entrant in results %}
+				<div class="well well-sm">
+					<h4> {{entrant.fname}} {{entrant.lname}} </h4>
+					<label>Entrant Id: </label> {{entrant.entrant_id}} <br>
+					<label>Username: </label> {{entrant.username}} <br>
+					<label>Phone Number: </label> {{entrant.phone_num}} <br>
+				</div>
+			  {% endfor %}
+		  </div>
 	</form>
 </div>
 {% endblock %}

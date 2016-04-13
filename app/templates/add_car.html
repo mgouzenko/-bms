@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "admin_dashboard_base.html" %}
 {% block body%}
 <div class="container">
   <h1> Add New Car </h1>
@@ -7,9 +7,9 @@
     <h3> <em> Registration Details </em> </h3>
     <!-- State Input -->
     <div class="form-group">
-      <label class="control-label col-sm-2" for="state">State (2 letters):</label>
+      <label class="control-label col-sm-2" for="state">State:</label>
       <div class="col-sm-10">
-        <input class="form-control" name="state" id="state">
+		  <input class="form-control" name="state" id="state" value="{{state}}" disabled>
       </div>
     </div>
 
@@ -17,10 +17,11 @@
     <div class="form-group">
       <label class="control-label col-sm-2" for="plate_num">Plate Number:</label>
       <div class="col-sm-10">
-        <input class="form-control" name="plate_num" id="plate_num">
+		  <input class="form-control" name="plate_num" id="plate_num" value="{{pnum}}" disabled>
       </div>
     </div>
 
+	<hr>
     <h3> <em>Car Details </em> </h3>
 
     <!-- Car Make Input -->

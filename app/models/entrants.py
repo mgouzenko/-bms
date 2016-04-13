@@ -20,6 +20,31 @@ class entrants(object):
         self.phone_num = phone_num
         self.building_id = building_id
 
+    @staticmethod
+    def search_by_name(fname, lname, building_id, database_connection):
+        search_predicates = ['building_id = :building_id']
+        search_attrs = {'building_id': building_id}
+
+        if not fname and not lname:
+            return []
+
+        if fname:
+            search_attrs['fname'] = fname
+            search_predicates.append('fname = :fname')
+
+        if lname:
+            search_attrs['lname'] = lname
+            search_predicates.append('lname = :lname')
+
+        query = """SELECT *
+                   FROM entrants NATURAL JOIN of_a
+                   WHERE {}""".format(' AND '.join(search_predicates))
+
+        print query
+
+        cursor = database_connection.execute(text(query), **search_attrs)
+        return [entrants(*result) for result in cursor]
+
     def put(self, database_connection):
         if self.entrant_id is not None:
             self.update()

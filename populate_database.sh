@@ -7,7 +7,6 @@ declare -a arr=("entrants" 					\
 				"buildings"					\
 				"service_providers"			\
 				"works_for"					\
-				"administers"				\
 				"parking_spots"				\
 				"vehicles"					\
 				"of_a"						\
