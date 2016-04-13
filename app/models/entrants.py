@@ -115,7 +115,7 @@ class entrants(object):
         query = """SELECT entrant_id, fname, lname, age,
                           username, password, phone_num,
                           building_id
-                   FROM entrants NATURAL JOIN of_a
+                   FROM entrants NATURAL LEFT OUTER JOIN of_a
                    WHERE entrant_id = :id"""
         cursor = database_connection.execute(text(query), id=str(entrant_id))
         result = cursor.fetchone()
@@ -184,6 +184,13 @@ class guests(unit_entrants):
     def delete_by_id(guest_id, database_connection):
         query = """DELETE FROM guests WHERE guests.entrant_id = :gid"""
         database_connection.execute(text(query), gid=guest_id)
+
+        query = """DELETE FROM unit_entrants WHERE entrant_id = :gid"""
+        database_connection.execute(text(query), gid=guest_id)
+
+        query = """DELETE FROM of_a WHERE entrant_id = :gid"""
+        database_connection.execute(text(query), gid=guest_id)
+
 
     def put(self, database_connection):
         skip_insertion = False

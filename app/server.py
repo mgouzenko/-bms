@@ -260,7 +260,11 @@ def admin_dashboard(admin_id, dash_type):
             kwargs['state'] = state
             kwargs['plate_num'] = pnum
             new_car = vehicles(**kwargs)
-            new_car.put(g.conn)
+            try:
+                new_car.put(g.conn)
+            except Exception as e:
+                flash('Spot, default spot, or key is already taken')
+
             return redirect(
                         '/admin_dashboard/{}/edit_car?s={}&l={}'.format(
                             admin.entrant_id,
