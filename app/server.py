@@ -219,6 +219,12 @@ def admin_dashboard(admin_id, dash_type):
                 lname_search=lname)
 
     if dash_type == 'requested_cars':
+        if request.method == 'POST': # Unpark the car in the get params
+            state_of_car_to_unpark = request.args.get('ups')
+            pnum_of_car_to_unpark  = request.args.get('upl')
+
+            unpark_car(admin.building_id, state_of_car_to_unpark, pnum_of_car_to_unpark)
+
         cars = vehicles.find_requested_cars(g.conn, admin.building_id)
         map(lambda c: c.get_drivers(g.conn), cars)
         return render_template('requested_cars.html', cars=cars, admin=admin)
@@ -268,14 +274,15 @@ def admin_dashboard(admin_id, dash_type):
         pnum = request.args.get('l')
         if request.method == 'POST':
             try:
-                update_car(state, pnum, request)
+                update_car(state, pnum, request, admin.building_id)
             except:
-                flash('Error: Default parking spot is taken')
+                flash('Error: Default parking spot is taken.')
 
             try:
-                park_car(state, pnum, request)
+                park_car(state, pnum, request, admin.building_id)
             except:
-                flash('Error: Spot or key slot is taken')
+                flash('Error: Spot is taken, key slot is taken, or spot does not exist.')
+
         car = vehicles.find_by_license_plate(g.conn, state, pnum, admin.building_id)
         if car is None:
             return redirect('/')
@@ -283,6 +290,7 @@ def admin_dashboard(admin_id, dash_type):
         car.get_drivers(g.conn)
 
         return render_template('edit_car.html', car=car, admin=admin)
+
 
 @app.route('/resident_dashboard/<user_id>')
 def route_to_guests(user_id):
@@ -346,7 +354,7 @@ def display_dashboard(user_id, dash_type):
 
     return redirect('/')
 
-def update_car(state, license_plate, request):
+def update_car(state, license_plate, request, building_id):
     # Update the database based on the form data
     g.conn.execute(
         'UPDATE vehicles\
@@ -365,10 +373,19 @@ def update_car(state, license_plate, request):
 
     try:
         if(request.form["default_spot"] != None and request.form["default_spot"] != ""):
-            g.conn.execute(
-                'UPDATE vehicles\
-                 SET default_spot = \'' + request.form["default_spot"] + '\'\
-                 WHERE state = \'' + str(state) + '\' AND plate_num = \'' + str(license_plate) + '\'')
+
+            spot_cursor = g.conn.execute(
+                '''SELECT spot_type
+                 FROM parking_spots
+                 WHERE building_id = {} AND spot_number = {} AND spot_type = 'Permanent' '''.format(building_id, request.form["default_spot"]))
+
+            if(spot_cursor.fetchone() != None):
+                g.conn.execute(
+                    'UPDATE vehicles\
+                     SET default_spot = \'' + request.form["default_spot"] + '\'\
+                     WHERE state = \'' + str(state) + '\' AND plate_num = \'' + str(license_plate) + '\'')
+            else:
+                flash("Cannot set default parking spot as {}. It does not exist, or it is not a permanent spot.".format(request.form["default_spot"]))
         else:
             g.conn.execute(
                 'UPDATE vehicles\
@@ -377,13 +394,13 @@ def update_car(state, license_plate, request):
     except:
         raise
 
-def park_car(state, license_plate, request):
-    # TODO: set building ID of car to current building
+def park_car(state, license_plate, request, building_id):
+    # TODO: park the car only for this building
     if(request.form["spot_number"] != None and request.form["spot_number"] != "" and request.form["key_number"] != None and request.form["key_number"] != ""):
         g.conn.execute(
             'UPDATE vehicles\
              SET spot_number = \'' + request.form["spot_number"] + '\', key_number = \'' + request.form["key_number"] + '\'\
-             WHERE state = \'' + str(state) + '\' AND plate_num = \'' + str(license_plate) + '\'')
+             WHERE building_id = ' + str(building_id) + ' AND state = \'' + str(state) + '\' AND plate_num = \'' + str(license_plate) + '\'')
 
 @app.route('/add_car', methods=['GET', 'POST'])
 def add_car():
@@ -410,16 +427,11 @@ def add_car():
 
     return render_template('add_car.html', admin=admin)
 
-@app.route('/requested_cars/<building_id>/unpark_car/<state>/<plate_num>', methods=['POST'])
 def unpark_car(building_id, state, plate_num):
-    # TODO: set building ID of car to NULL
     g.conn.execute(
                 'UPDATE vehicles\
                  SET spot_number = NULL, key_number = NULL, is_requested = FALSE \
-                 WHERE state = \'' + str(state) + '\' AND plate_num = \'' + str(plate_num) + '\'')
-
-    return redirect("/requested_cars/" + building_id)
-
+                 WHERE building_id = ' + str(building_id) + ' AND state = \'' + str(state) + '\' AND plate_num = \'' + str(plate_num) + '\'')
 
 @app.route('/<int:provider_id>/business_dashboard', methods=['GET', 'POST'])
 def business_dashboard(provider_id):
