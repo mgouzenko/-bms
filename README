@@ -1,29 +1,71 @@
-PostgreSQL account containing database: mag2272
+Mitchell Gouzenko
+Adam Chelminski
 
+PostgreSQL account containing database: mag2272
 URL: http://40.114.5.177:8111/
 
 Description:
-	Our web application implements the following features:
+	Our web application is a system that permits for management of concierge
+	services in condominiums. Specifically, our system provides functionality
+	to register guests, manage vehicles, request cars, and browse services
+	available to the building.
+
+	The primary entity is the entrant. An entrant is simply a person who can
+	enter a building. Subclasses of entrants include admins, service
+	providers, and unit entrants.
+
+Our web application implements the following features:
 		* Dashboard for Residents
 			* Interface to register guests
 			* Interface to request parked cars that they are allowed to drive
-			* Interface to to view the third-party services available to the resident
+			* Interface to to view the third-party services available to the
+			  resident
 		* Dashboard for Building Administrators
 			* Interface to look up and check entrants
-				* Ability to add a drivable car to a found entrant, so that the entrant can request the car from their dashboard if they are a resident.
+				* Ability to add a drivable car to a found entrant, so that
+				  the entrant can request the car from their dashboard if they
+				  are a resident.
+				* Ability to add guests under the entrant.
+				* Ability to see what cars the entrant drives, and where those
+				  cars are currently parked.
 			* Interface to view the currently requested cars
-				* Ability to mark car as "unparked" which sets it as no longer requested and removes parking information from it so it is effectively no longer parked in the building
-			* Interface to look up a car by state & license plate and park it or modify its information
-				* If the lookup doesn't find the car in the database, an interface to add a new car is shown
+				* Ability to mark car as "unparked" which sets it as no longer
+				  requested and removes parking information from it so it is
+				  effectively no longer parked in the building
+			* Interface to look up a car by state & license plate and park it
+			  or modify its information
+				* If the lookup doesn't find the car in the database, an
+				  interface to add a new car is shown
 		* Dashboard for Business Owners
-			* Interface to modify the description and contact information for a business, as well as to choose which buildings are served by the business.
+			* Interface to modify the description and contact information for
+			  a business, as well as to choose which buildings are served by
+			  the business.
 
-	This application fully implements the specification we laid out in Part 1. 
+	This application fully implements the specification we laid out in Part 1.
 
-	The only major features that are missing are the ability to add or remove buildings, add or remove residents and service employees from a building, and the ability to create a new business. This is because this was not in our specification, and is not really necessary if the database is pre-populated with data. We pre-populated the database with a slightly modified version of the sample data from Part 2, thus the application is still able to interact with the database in very interesting ways.
+	The only minor features that are missing are the ability to add or remove
+	buildings, add or remove residents and service employees from a building,
+	and the ability to create a new business. This is because this was not in
+	our specification, and is not really necessary if the database is
+	pre-populated with data. We pre-populated the database with a slightly
+	modified version of the sample data from Part 2, thus the application is
+	still able to interact with the database in very interesting ways.
 
 Two most interesting web pages:
 	Cars Page in the Resident Dashboard:
-		This page is interestingly complex because not only does it list cars for which the logged-in resident is a driver, it also looks up all of the cars driven by residents of the unit in which the logged-in resident resides, as well as cars driven by guests of the current unit. This way, anyone living in an apartment can request cars behalf of their guests.
+		This page is interestingly complex because not only does it list cars
+		for which the logged-in resident is a driver, it also looks up all of
+		the cars driven by residents of the unit in which the logged-in
+		resident resides, as well as cars driven by guests of the current
+		unit. This way, anyone living in an apartment can request cars behalf
+		of their guests.
 
-	
+	Entrant Search Page in Admin Dashboard:
+		This page ties together all of the useful components of our
+		application. It allows admins to query for residents and other guests.
+		Upon finding the desired person, the admin can add him or her as the
+		driver of a car. Furthermore, if the person is a resident, the admin
+		can add guests under the residents's name, as well as see the
+		resident's current visitors. The search yields results such as the
+		phone number of the resident, what cars he/she drives, and the
+		resident's unit number.
