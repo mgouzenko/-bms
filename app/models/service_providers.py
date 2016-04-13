@@ -33,3 +33,14 @@ class service_providers(object):
         if result is None:
             return None
         return service_providers(*result)
+
+    @staticmethod
+    def list_for_building(building_id, database_connection):
+        query = """SELECT business_id, business_name, business_description,
+                          phone_num, email
+                   FROM service_providers NATURAL JOIN provides_services_for
+                   WHERE provides_services_for.building_id = :bid"""
+        cursor = database_connection.execute(text(query), bid=building_id)
+
+        return [service_providers(*result) for result in cursor]
+
