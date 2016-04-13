@@ -23,3 +23,7 @@ Description:
 	The only major features that are missing are the ability to add or remove buildings, add or remove residents and service employees from a building, and the ability to create a new business. This is because this was not in our specification, and is not really necessary if the database is pre-populated with data. We pre-populated the database with a slightly modified version of the sample data from Part 2, thus the application is still able to interact with the database in very interesting ways.
 
 Two most interesting web pages:
+	Cars Page in the Resident Dashboard:
+		This page is interestingly complex because not only does it list cars for which the logged-in resident is a driver, it also looks up all of the cars driven by residents of the unit in which the logged-in resident resides, as well as cars driven by guests of the current unit. This way, anyone living in an apartment can request cars behalf of their guests.
+
+	
