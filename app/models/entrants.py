@@ -61,9 +61,9 @@ class entrants(object):
     @staticmethod
     def find_by_id(entrant_id, database_connection):
         query = """SELECT *
-                   FROM entrants NATURAL_JOIN of_a
-                   WHERE entrants.entrant_id = :id"""
-        cursor = database_connection.execute(text(query), id=entrant_id)
+                   FROM entrants NATURAL JOIN of_a
+                   WHERE entrant_id = :id"""
+        cursor = database_connection.execute(text(query), id=str(entrant_id))
         result = cursor.fetchone()
         if result is None:
             return result
