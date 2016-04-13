@@ -59,7 +59,9 @@ class entrants(object):
             search_attrs['lname'] = lname
             search_predicates.append('lname = :lname')
 
-        query = """SELECT *
+        query = """SELECT entrant_id, fname, lname, age,
+                          username, password, phone_num,
+                          building_id
                    FROM entrants NATURAL JOIN of_a
                    WHERE {}""".format(' AND '.join(search_predicates))
 
@@ -97,7 +99,9 @@ class entrants(object):
 
     @staticmethod
     def find_by_username(username, database_connection):
-        query = """SELECT *
+        query = """SELECT entrant_id, fname, lname, age,
+                          username, password, phone_num,
+                          building_id
                    FROM entrants NATURAL JOIN of_a
                    WHERE entrants.username = :name"""
         cursor = database_connection.execute(text(query), name=username)
@@ -108,7 +112,9 @@ class entrants(object):
 
     @staticmethod
     def find_by_id(entrant_id, database_connection):
-        query = """SELECT *
+        query = """SELECT entrant_id, fname, lname, age,
+                          username, password, phone_num,
+                          building_id
                    FROM entrants NATURAL JOIN of_a
                    WHERE entrant_id = :id"""
         cursor = database_connection.execute(text(query), id=str(entrant_id))
@@ -121,8 +127,11 @@ class admins(entrants):
 
     @staticmethod
     def find_by_username(username, database_connection):
-        query = """SELECT * FROM entrants NATURAL JOIN admins NATURAL JOIN of_a
-                   WHERE username = :name"""
+        query = """SELECT entrant_id, fname, lname, age,
+                          username, password, phone_num,
+                          building_id
+                    FROM entrants NATURAL JOIN admins NATURAL JOIN of_a
+                    WHERE username = :name"""
         cursor = database_connection.execute(text(query), name=username)
         result = cursor.fetchone()
         if result is None:
@@ -131,7 +140,10 @@ class admins(entrants):
 
     @staticmethod
     def find_by_id(admin_id, database_connection):
-        query = """SELECT * FROM entrants NATURAL JOIN admins NATURAL JOIN of_a
+        query = """SELECT entrant_id, fname, lname, age,
+                          username, password, phone_num,
+                          building_id
+                   FROM entrants NATURAL JOIN admins NATURAL JOIN of_a
                    WHERE entrant_id = :eid"""
         cursor = database_connection.execute(text(query), eid=admin_id)
         result = cursor.fetchone()
