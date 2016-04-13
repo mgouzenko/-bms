@@ -165,6 +165,12 @@ class unit_entrants(entrants):
         super(unit_entrants, self).put(database_connection)
 
         if not skip_insertion:
+            query = """INSERT INTO of_a (building_id, entrant_id)
+                       VALUES (:building_id, :entrant_id)"""
+            database_connection.execute(text(query),
+                                        building_id=self.building_id,
+                                        entrant_id=self.entrant_id)
+
             query = """INSERT INTO unit_entrants (unit_id, building_id, entrant_id)
                        VALUES (:unit_id, :building_id, :entrant_id)"""
             database_connection.execute(text(query),
