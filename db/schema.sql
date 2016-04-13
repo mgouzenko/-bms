@@ -106,7 +106,7 @@ CREATE TABLE vehicles (
 	UNIQUE (key_number, building_id),
 	FOREIGN KEY (spot_number, building_id) REFERENCES parking_spots,
 	FOREIGN KEY (default_spot, building_id) REFERENCES parking_spots,
-	PRIMARY KEY (state, plate_num)
+	PRIMARY KEY (building_id, state, plate_num)
 );
 
 DROP TABLE if exists of_a;
