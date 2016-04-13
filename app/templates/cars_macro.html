@@ -1,17 +1,17 @@
 {% macro display_cars(cars) -%}
 <div class="container">
-	<form>
+	<form class="form-horizontal" role="form" method="post" action="cars">
 		<div class="form-group">
-			<label class="control-label col-sm-4" for="description">
-				Cars:
-			</label>
+			<h3>Cars</h3>
 
-			<div class="col-sm-offset-1 col-sm-11">
+			<div class="col-sm-11">
 				{% for car in cars %}
 				<div class="well">
 					<h4> {{car.make}} {{car.model}} </h4>
 					<label> License Plate No: </label> {{ car.plate_num}} <br>
 					<label> Color: </label> {{ car.color }} <br>
+					<label> Current spot: </label> {{car.spot_number}} <br>
+					<label> Default spot: </label> {{car.default_spot}} <br>
 					<label>	Drivers: </label>
 					<ul>
 						{% for driver in car.drivers %}
@@ -19,13 +19,13 @@
 						{% endfor %}
 					</ul>
 					<label class="active">
-						<input type="checkbox" name="cars" value="{{car.plate_num}} {{car.state}}" {% if car.is_requested %} checked {% endif %}>
+						<input type="checkbox" name="{{car.plate_num}} {{car.state}}" {% if car.is_requested %} checked {% endif %}>
 					</label>
 				</div>
 				{% endfor %}
 			</div>
 			<div class="form-group">
-				<div class="col-sm-offset-1 col-sm-10">
+				<div class="col-sm-10">
 			  		<button type="submit" class="btn btn-primary">
 						Update Requests
 					</button>

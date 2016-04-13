@@ -114,10 +114,11 @@ def add():
 def login(entity_type):
     if g.user_id and g.entity_type:
         if g.entity_type == 'businesses':
-            print '/{}/business_dashboard'.format(g.user_id)
             return redirect('/{}/business_dashboard'.format(g.user_id))
         elif g.entity_type == 'residents':
             return redirect('/resident_dashboard/{}'.format(g.user_id))
+        elif g.entity_type == 'admins':
+            return redirect('/admin_dashboard/{}'.format(g.user_id))
 
 
     if entity_type == 'residents':
@@ -140,7 +141,7 @@ def login(entity_type):
                      if username else None)
             if admin:
                 resp = make_response(
-                        redirect('/'))
+                        redirect('/admin_dashboard/{}'.format(admin.entrant_id)))
                 resp.set_cookie('user_id', value=str(admin.entrant_id))
                 resp.set_cookie('entity_type', entity_type)
                 return resp
@@ -167,6 +168,21 @@ def logout():
     resp.set_cookie('entity_type', '', expires=0)
     return resp
 
+@app.route('/admin_dashboard/<admin_id>')
+def route_to_search(admin_id):
+    return redirect('/admin_dashboard/{}/search'.format(admin_id))
+
+@app.route('/admin_dashboard/<admin_id>/<dash_type>', methods=['GET', 'POST'])
+def admin_dashboard(admin_id, dash_type):
+    if g.entity_type != 'admins' or g.user_id != admin_id:
+        return redirect('/')
+
+    admin = admins.find_by_id(g.user_id, g.conn)
+    if dash_type == 'search':
+        return render_template(
+                'admin_dashboard_search.html',
+                admin=admin)
+
 @app.route('/resident_dashboard/<user_id>')
 def route_to_guests(user_id):
     return redirect('/resident_dashboard/{}/guests'.format(user_id))
@@ -178,6 +194,9 @@ def display_dashboard(user_id, dash_type):
     resident = residents.find_by_id(user_id, g.conn)
 
     if dash_type == 'guests':
+        if request.method == 'POST':
+            for guest_id, _ in request.form.iteritems():
+                guests.delete_by_id(guest_id, g.conn)
         guests_of_resident = resident.get_guests(g.conn)
         return render_template(
                 'resident_dashboard_guests.html',
@@ -202,6 +221,13 @@ def display_dashboard(user_id, dash_type):
 
     elif dash_type == 'cars':
         cars = resident.get_cars(g.conn)
+        if request.method == 'POST':
+            for car in cars:
+                car_identifier = '{} {}'.format(car.plate_num, car.state)
+                if car_identifier in request.form and not car.is_requested:
+                    car.request(g.conn)
+                elif car_identifier not in request.form and car.is_requested:
+                    car.request(g.conn, False)
         map(lambda c: c.get_drivers(g.conn), cars)
         return render_template(
                 'resident_dashboard_cars.html',

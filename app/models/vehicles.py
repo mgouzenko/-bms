@@ -15,6 +15,16 @@ class vehicles(object):
         self.building_id = building_id
         self.drivers = None
 
+    def request(self, database_connection, requested=True):
+        self.is_requested = requested
+        query = """UPDATE vehicles set is_requested = :req
+                   WHERE plate_num = :num AND state = :state"""
+        database_connection.execute(text(query),
+                                    req=requested,
+                                    num=self.plate_num,
+                                    state=self.state)
+
+
     def get_drivers(self, database_connection):
         if self.drivers:
             return self.drivers

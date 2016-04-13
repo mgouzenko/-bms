@@ -114,6 +114,11 @@ class unit_entrants(entrants):
 
 class guests(unit_entrants):
 
+    @staticmethod
+    def delete_by_id(guest_id, database_connection):
+        query = """DELETE FROM guests WHERE guests.entrant_id = :gid"""
+        database_connection.execute(text(query), gid=guest_id)
+
     def put(self, database_connection):
         skip_insertion = False
         if self.entrant_id != None:

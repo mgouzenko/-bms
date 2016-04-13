@@ -4,7 +4,7 @@
 		<div class="container-fluid">
 			<div class="navbar-header">
 				<a class="navbar-brand" href="#">
-					Resident Dashboard
+					Admin Dashboard
 				</a>
 			</div>
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -18,14 +18,12 @@
 							aria-expanded="false"> Account <span class="caret"></span>
 						</a>
 						<ul class="dropdown-menu">
-							<li><a href="guests">Manage Guests</a></li>
-							<li><a href="add_guests">Add a Guest</a>
-							<li><a href="cars">Cars</a></li>
+							<li><a href="search">Entrant Lookup</a></li>
 							<li><a href="{{ url_for('logout')}}">Log Out</a></li>
 							<li role="separator" class="divider"></li>
 							<li>
 								<p class="navbar-text">
-									Signed in as {{resident.fname}} {{resident.lname}}
+									Signed in as {{admin.fname}} {{admin.lname}}
 								</p>
 							</li>
 						</ul>
