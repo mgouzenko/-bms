@@ -178,10 +178,81 @@ def admin_dashboard(admin_id, dash_type):
         return redirect('/')
 
     admin = admins.find_by_id(g.user_id, g.conn)
+
     if dash_type == 'search':
+        search_results = []
+        if request.method == 'POST':
+            fname = request.form.get('fname')
+            lname = request.form.get('lname')
+            search_results = entrants.search_by_name(
+                    fname, lname, admin.building_id, g.conn)
         return render_template(
                 'admin_dashboard_search.html',
-                admin=admin)
+                admin=admin,
+                results=search_results)
+
+    if dash_type == 'requested_cars':
+        cars = vehicles.find_requested_cars(g.conn, admin.building_id)
+        map(lambda c: c.get_drivers(g.conn), cars)
+        return render_template('requested_cars.html', cars=cars, admin=admin)
+
+    if dash_type == 'park':
+        if request.method == 'POST':
+            state = request.form.get('state')
+            pnum = request.form.get('pnum')
+            res = vehicles.find_by_license_plate(g.conn, state, pnum)
+            if res is not None:
+                return redirect(
+                        '/admin_dashboard/{}/edit_car?s={}&l={}'.format(
+                            admin.entrant_id,
+                            state,
+                            pnum))
+            else:
+                return redirect(
+                        '/admin_dashboard/{}/add_car?s={}&l={}'.format(
+                            admin.entrant_id,
+                            state,
+                            pnum))
+
+        return render_template('admin_dashboard_park.html', admin=admin)
+
+    if dash_type == 'add_car':
+        state = request.args.get('s')
+        pnum = request.args.get('l')
+        if request.method == 'POST':
+            kwargs = { attr:val if val else None
+                       for attr, val in request.form.iteritems()}
+            kwargs['is_requested'] = False
+            kwargs['building_id'] = admin.building_id
+            kwargs['state'] = state
+            kwargs['plate_num'] = pnum
+            new_car = vehicles(**kwargs)
+            new_car.put(g.conn)
+            return redirect(
+                        '/admin_dashboard/{}/edit_car?s={}&l={}'.format(
+                            admin.entrant_id,
+                            state,
+                            pnum))
+        return render_template(
+                'add_car.html', admin=admin, state=state, pnum=pnum)
+
+    if dash_type == 'edit_car':
+        state = request.args.get('s')
+        pnum = request.args.get('l')
+        if request.method == 'POST':
+            try:
+                update_car(state, pnum, request)
+            except:
+                flash('Error: Default parking spot is taken')
+
+            try:
+                park_car(state, pnum, request)
+            except:
+                flash('Error: Spot or key slot is taken')
+        car = vehicles.find_by_license_plate(g.conn, state, pnum)
+        if car is None:
+            return redirect('/')
+        return render_template('edit_car.html', car=car, admin=admin)
 
 @app.route('/resident_dashboard/<user_id>')
 def route_to_guests(user_id):
@@ -239,18 +310,20 @@ def display_dashboard(user_id, dash_type):
 
 @app.route('/car/<state>/<license_plate>/', methods=['GET', 'POST'])
 def car(state, license_plate):
-    if request.method == 'POST':
-        print 'unimplemented'
+    if g.entity_type != 'admins':
+        return redirect('/')
+
+    admin = admins.find_by_id(g.user_id, g.conn)
 
     car = vehicles.find_by_license_plate(g.conn, state, license_plate)
 
     if(car != None):
-        return render_template('edit_car.html', car=car)
+        return render_template('edit_car.html', car=car, admin=admin)
     else:
-        return render_template('error.html', error_desc="That car was not found.")
+        return render_template(
+                'error.html', error_desc="That car was not found.", admin=admin)
 
-@app.route('/car/<state>/<license_plate>/update_car', methods=['POST'])
-def update_car(state, license_plate):
+def update_car(state, license_plate, request):
     # Update the database based on the form data
     g.conn.execute(
         'UPDATE vehicles\
@@ -278,28 +351,23 @@ def update_car(state, license_plate):
                 'UPDATE vehicles\
                  SET default_spot = NULL \
                  WHERE state = \'' + str(state) + '\' AND plate_num = \'' + str(license_plate) + '\'')
-    except Exception as e:
-        return render_template("error.html", error_desc="That spot is already reserved.")
-
-    print license_plate
-    return redirect('/car/' + state + '/' + license_plate)
-
-@app.route('/car/<state>/<license_plate>/park_car', methods=['POST'])
-def park_car(state, license_plate):
-    try:
-        # TODO: set building ID of car to current building
-        if(request.form["spot_number"] != None and request.form["spot_number"] != "" and request.form["key_number"] != None and request.form["key_number"] != ""):
-            g.conn.execute(
-                'UPDATE vehicles\
-                 SET spot_number = \'' + request.form["spot_number"] + '\', key_number = \'' + request.form["key_number"] + '\'\
-                 WHERE state = \'' + str(state) + '\' AND plate_num = \'' + str(license_plate) + '\'')
     except:
-        return render_template("error.html", error_desc="Error parking car. That spot or key slot is already taken.")
+        raise
 
-    return redirect('/car/' + state + '/' + license_plate)
+def park_car(state, license_plate, request):
+    # TODO: set building ID of car to current building
+    if(request.form["spot_number"] != None and request.form["spot_number"] != "" and request.form["key_number"] != None and request.form["key_number"] != ""):
+        g.conn.execute(
+            'UPDATE vehicles\
+             SET spot_number = \'' + request.form["spot_number"] + '\', key_number = \'' + request.form["key_number"] + '\'\
+             WHERE state = \'' + str(state) + '\' AND plate_num = \'' + str(license_plate) + '\'')
 
 @app.route('/add_car', methods=['GET', 'POST'])
 def add_car():
+    if g.entity_type != 'admin':
+        return redirect('/')
+    admin = admins.find_by_id(g.user_id, g.conn)
+
     if request.method == 'POST':
 
         new_car = ()
@@ -317,16 +385,7 @@ def add_car():
 
         return redirect('/car/' + state + '/' + license_plate)
 
-    return render_template('add_car.html')
-
-@app.route('/requested_cars/<building_id>/', methods=['GET', 'POST'])
-def requested_cars(building_id):
-    if request.method == 'POST':
-        print "unimplemented"
-
-    cars = vehicles.find_requested_cars(g.conn, building_id)
-    map(lambda c: c.get_drivers(g.conn), cars)
-    return render_template('requested_cars.html', cars=cars)
+    return render_template('add_car.html', admin=admin)
 
 @app.route('/requested_cars/<building_id>/unpark_car/<state>/<plate_num>', methods=['POST'])
 def unpark_car(building_id, state, plate_num):

@@ -62,22 +62,6 @@ CREATE TABLE works_for (
 							  ON DELETE CASCADE
 );
 
-DROP TABLE if exists administers;
-CREATE TABLE administers (
-	entrant_id INTEGER,
-	building_id INTEGER,
-	role char(25) check (role = 'Concierge' OR
-						 role = 'Valet' OR
-						 role = 'Delivery' OR
-						 role = 'Maintenance' OR
-						 role = 'Clerical'),
-	PRIMARY KEY (entrant_id, building_id),
-	FOREIGN KEY (entrant_id) REFERENCES admins
-							 ON DELETE CASCADE,
-	FOREIGN KEY (building_id) REFERENCES buildings
-							  ON DELETE CASCADE
-);
-
 DROP TABLE if exists parking_spots CASCADE;
 CREATE TABLE parking_spots ( -- parking spots within a building
 	spot_number INTEGER,
