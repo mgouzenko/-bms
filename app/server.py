@@ -4,7 +4,7 @@ from sqlalchemy import *
 from sqlalchemy.pool import NullPool
 from flask import Flask, request, render_template, g, redirect, Response, make_response, flash
 
-from models import entrants, residents, service_providers, guests, admins
+from models import entrants, residents, service_providers, guests, admins, vehicles
 
 tmpl_dir = os.path.join(
     os.path.dirname(
@@ -210,6 +210,108 @@ def display_dashboard(user_id, dash_type):
                 entity_type="Resident")
 
     return redirect('/')
+
+@app.route('/car/<state>/<license_plate>/', methods=['GET', 'POST'])
+def car(state, license_plate):
+    if request.method == 'POST':
+        print 'unimplemented'
+
+    car = vehicles.find_by_license_plate(g.conn, state, license_plate)
+
+    if(car != None):
+        return render_template('edit_car.html', car=car)
+    else:
+        return render_template('error.html', error_desc="That car was not found.")
+
+@app.route('/car/<state>/<license_plate>/update_car', methods=['POST'])
+def update_car(state, license_plate):
+    # Update the database based on the form data
+    g.conn.execute(
+        'UPDATE vehicles\
+         SET make = \'' + request.form["make"] + '\'\
+         WHERE state = \'' + str(state) + '\' AND plate_num = \'' + str(license_plate) + '\'')
+
+    g.conn.execute(
+        'UPDATE vehicles\
+         SET model = \'' + request.form["model"] + '\'\
+         WHERE state = \'' + str(state) + '\' AND plate_num = \'' + str(license_plate) + '\'')
+
+    g.conn.execute(
+        'UPDATE vehicles\
+         SET color = \'' + request.form["color"] + '\'\
+         WHERE state = \'' + str(state) + '\' AND plate_num = \'' + str(license_plate) + '\'')
+
+    try:
+        if(request.form["default_spot"] != None and request.form["default_spot"] != ""):
+            g.conn.execute(
+                'UPDATE vehicles\
+                 SET default_spot = \'' + request.form["default_spot"] + '\'\
+                 WHERE state = \'' + str(state) + '\' AND plate_num = \'' + str(license_plate) + '\'')
+        else:
+            g.conn.execute(
+                'UPDATE vehicles\
+                 SET default_spot = NULL \
+                 WHERE state = \'' + str(state) + '\' AND plate_num = \'' + str(license_plate) + '\'')
+    except:
+        return render_template("error.html", error_desc="That spot is already reserved.")
+
+    print license_plate
+    return redirect('/car/' + state + '/' + license_plate)
+
+@app.route('/car/<state>/<license_plate>/park_car', methods=['POST'])
+def park_car(state, license_plate):
+    try:
+        # TODO: set building ID of car to current building
+        if(request.form["spot_number"] != None and request.form["spot_number"] != "" and request.form["key_number"] != None and request.form["key_number"] != ""):
+            g.conn.execute(
+                'UPDATE vehicles\
+                 SET spot_number = \'' + request.form["spot_number"] + '\', key_number = \'' + request.form["key_number"] + '\'\
+                 WHERE state = \'' + str(state) + '\' AND plate_num = \'' + str(license_plate) + '\'')
+    except:
+        return render_template("error.html", error_desc="Error parking car. That spot or key slot is already taken.")
+
+    return redirect('/car/' + state + '/' + license_plate)
+
+@app.route('/add_car', methods=['GET', 'POST'])
+def add_car():
+    if request.method == 'POST':
+
+        new_car = ()
+
+        # TODO: set building ID of car to current building
+        if(request.form["spot_number"] != None and request.form["spot_number"] != "" and request.form["key_number"] != None and request.form["key_number"] != ""):
+            g.conn.execute(
+                'UPDATE vehicles\
+                 SET spot_number = \'' + request.form["spot_number"] + '\'\
+                 WHERE state = \'' + str(state) + '\' AND plate_num = \'' + str(license_plate) + '\'')
+            g.conn.execute(
+                'UPDATE vehicles\
+                 SET key_number = \'' + request.form["key_number"] + '\'\
+                 WHERE state = \'' + str(state) + '\' AND plate_num = \'' + str(license_plate) + '\'')
+
+        return redirect('/car/' + state + '/' + license_plate)
+
+    return render_template('add_car.html')
+
+@app.route('/requested_cars/<building_id>/', methods=['GET', 'POST'])
+def requested_cars(building_id):
+    if request.method == 'POST':
+        print "unimplemented"
+
+    cars = vehicles.find_requested_cars(g.conn, building_id)
+    map(lambda c: c.get_drivers(g.conn), cars)
+    return render_template('requested_cars.html', cars=cars)
+
+@app.route('/requested_cars/<building_id>/unpark_car/<state>/<plate_num>', methods=['POST'])
+def unpark_car(building_id, state, plate_num):
+    # TODO: set building ID of car to NULL
+    g.conn.execute(
+                'UPDATE vehicles\
+                 SET spot_number = NULL, key_number = NULL, is_requested = FALSE \
+                 WHERE state = \'' + str(state) + '\' AND plate_num = \'' + str(plate_num) + '\'')
+
+    return redirect("/requested_cars/" + building_id)
+
 
 @app.route('/<int:provider_id>/business_dashboard', methods=['GET', 'POST'])
 def business_dashboard(provider_id):

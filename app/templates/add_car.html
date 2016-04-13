@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block body%}
+<div class="container">
+  <h1> Add New Car </h1>
+  <form method="POST" class="form-horizontal" role="form">
+
+    <h3> <em> Registration Details </em> </h3>
+    <!-- State Input -->
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="state">State (2 letters):</label>
+      <div class="col-sm-10">
+        <input class="form-control" name="state" id="state">
+      </div>
+    </div>
+
+    <!-- Plate Number Input -->
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="plate_num">Plate Number:</label>
+      <div class="col-sm-10">
+        <input class="form-control" name="plate_num" id="plate_num">
+      </div>
+    </div>
+
+    <h3> <em>Car Details </em> </h3>
+
+    <!-- Car Make Input -->
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="make">Car Make:</label>
+      <div class="col-sm-10">
+        <input class="form-control" name="make" id="make">
+      </div>
+    </div>
+
+    <!-- Car Model Input -->
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="model">Car Model:</label>
+      <div class="col-sm-10">
+        <input class="form-control" name="model" id="model">
+      </div>
+    </div>
+
+    <!-- Car Color Input -->
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="color">Car Color:</label>
+      <div class="col-sm-10">
+        <input class="form-control" name="color" id="color">
+      </div>
+    </div>
+
+    <!-- Default Parking Spot Input -->
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="default_spot">Default Parking Spot:</label>
+      <div class="col-sm-10">
+        <input class="form-control" name="default_spot" id="default_spot">
+      </div>
+    </div>
+
+    <h3> <em> Parking Details </em></h3>
+    <!-- Current Parking Spot Input -->
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="spot_number">Current Parking Spot:</label>
+      <div class="col-sm-10">
+        <input class="form-control" name="spot_number" id="spot_number">
+      </div>
+    </div>
+
+    <!-- Key Number Input -->
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="key_number">Key Slot Number:</label>
+      <div class="col-sm-10">
+        <input class="form-control" name="key_number" id="key_number">
+      </div>
+    </div>
+
+    <!-- Add & Park Car Button -->
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-primary">Add &amp; Park Car</button>
+      </div>
+    </div>
+  </form>
+
+</div>
+{% endblock %}

@@ -99,10 +99,13 @@ CREATE TABLE vehicles (
 	is_requested BOOLEAN,
 	key_number INTEGER,
 	spot_number INTEGER,
+	default_spot INTEGER,
 	building_id INTEGER,
 	UNIQUE (spot_number, building_id),
-	UNIQUE (key_number),
+	UNIQUE (default_spot, building_id),
+	UNIQUE (key_number, building_id),
 	FOREIGN KEY (spot_number, building_id) REFERENCES parking_spots,
+	FOREIGN KEY (default_spot, building_id) REFERENCES parking_spots,
 	PRIMARY KEY (state, plate_num)
 );
 

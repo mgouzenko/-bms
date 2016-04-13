@@ -1,0 +1,36 @@
+{% macro display_cars(cars) -%}
+<div class="container">
+	<div class="form-group">
+		<label class="control-label col-sm-4" for="description">
+			Cars:
+		</label>
+
+		<div class="col-sm-offset-1 col-sm-11">
+			{% for car in cars %}
+			<div class="well">
+				<h4> {{car.make}} {{car.model}} </h4>
+				<label> State: </label> {{ car.state }} <br>
+				<label> License Plate No: </label> {{ car.plate_num}} <br>
+				<label> Color: </label> {{ car.color }} <br>
+
+				<br>
+				<label> Current Parking Spot: </label> {{ car.spot_number }}<br>
+				<label> Key Slot Number: </label> {{ car.key_number }}<br>
+
+				<br>
+
+				<label>	Drivers: </label>
+				<ul>
+					{% for driver in car.drivers %}
+						<li> {{ driver.fname }} </li>
+					{% endfor %}
+				</ul>
+				<form method="POST" action="unpark_car/{{ car.state }}/{{ car.plate_num }}">
+					<button type="submit" class="btn btn-primary">Mark as Unparked</button>
+				</form>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+{%- endmacro %}

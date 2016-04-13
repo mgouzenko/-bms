@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block body%}
+<div class="container">
+  <h1> Update or Park Car </h1>
+  <h3> <em> Details for {{ car.state }} - {{ car.plate_num }}</em></h3>
+
+  <br/>
+  <form action="update_car" method="POST" class="form-horizontal" role="form">
+    <!-- Car Make Input -->
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="make">Car Make:</label>
+      <div class="col-sm-10">
+        <input class="form-control" name="make" id="make" value="{{ car.make }}">
+      </div>
+    </div>
+
+    <!-- Car Model Input -->
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="model">Car Model:</label>
+      <div class="col-sm-10">
+        <input class="form-control" name="model" id="model" value="{{ car.model }}">
+      </div>
+    </div>
+
+    <!-- Car Color Input -->
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="color">Car Color:</label>
+      <div class="col-sm-10">
+        <input class="form-control" name="color" id="color" value="{{ car.color }}">
+      </div>
+    </div>
+
+    <!-- Default Parking Spot Input -->
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="default_spot">Default Parking Spot:</label>
+      <div class="col-sm-10">
+        <input class="form-control" name="default_spot" id="default_spot" value="{% if car.default_spot %}{{ car.default_spot }}{% endif %}">
+      </div>
+    </div>
+
+    <!-- Update Car Button -->
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-primary">Update Car</button>
+      </div>
+    </div>
+  </form>
+
+  <h3> <em> Parking Information</em></h3>
+  <br/>
+  <form method="POST" action="park_car" class="form-horizontal" role="form">
+
+    <!-- Current Parking Spot Input -->
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="spot_number">Current Parking Spot:</label>
+      <div class="col-sm-10">
+        <input class="form-control" name="spot_number" id="spot_number" value="{% if car.spot_number %}{{ car.spot_number }}{% endif %}">
+      </div>
+    </div>
+
+    <!-- Key Number Input -->
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="key_number">Key Slot Number:</label>
+      <div class="col-sm-10">
+        <input class="form-control" name="key_number" id="key_number" value="{% if car.key_number %}{{ car.key_number }}{% endif %}">
+      </div>
+    </div>
+
+    <!-- Park Car Button -->
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-primary">Park Car</button>
+      </div>
+    </div>
+  </form>
+
+</div>
+{% endblock %}
