@@ -163,15 +163,13 @@ class residents(entrants):
         return [ entrants(*row) for row in cursor ]
 
     def get_cars(self, database_connection):
-        query = """SELECT spot_number
-                   FROM units NATURAL JOIN owns NATURAL JOIN parking_spots
+        query = """SELECT state, plate_num, make, model, color, is_requested,
+                          key_number, spot_number, default_spot, building_id
+                   FROM unit_entrants NATURAL JOIN drives NATURAL JOIN vehicles
                    WHERE building_id = :bid and unit_id = :uid
                    """
         cursor = database_connection.execute(
                 text(query), bid=self.building_id, uid=self.unit_id)
 
-        cars = [ vehicles.find_by_spot(
-                    database_connection,
-                    self.building_id,
-                    spot[0]) for spot in cursor]
+        cars = [ vehicles(*result) for result in cursor]
         return cars

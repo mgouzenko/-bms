@@ -42,8 +42,8 @@ class vehicles(object):
     def find_by_spot(database_connection, building_id, spot):
         query = """SELECT state, plate_num, make, model, color, is_requested,
                           key_number, spot_number, default_spot, building_id
-                   FROM parking_spots natural join vehicles
-                   WHERE building_id = :bid and spot_number = :snum"""
+                   FROM parking_spots NATURAL RIGHT OUTER JOIN vehicles
+                   WHERE building_id = :bid and default_spot = :snum"""
         cursor = database_connection.execute(
                 text(query), bid=building_id, snum=spot)
         result = cursor.fetchone()
@@ -66,7 +66,7 @@ class vehicles(object):
     def find_by_license_plate(database_connection, state, license_plate):
         query = query = """SELECT state, plate_num, make, model, color, is_requested,
                                   key_number, spot_number, default_spot, building_id
-                           FROM parking_spots natural join vehicles
+                           FROM parking_spots NATURAL RIGHT OUTER JOIN vehicles
                            WHERE state = :state and plate_num = :plate_num"""
         cursor = database_connection.execute(
             text(query), state=state, plate_num=license_plate)

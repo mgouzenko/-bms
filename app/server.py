@@ -278,7 +278,7 @@ def update_car(state, license_plate):
                 'UPDATE vehicles\
                  SET default_spot = NULL \
                  WHERE state = \'' + str(state) + '\' AND plate_num = \'' + str(license_plate) + '\'')
-    except:
+    except Exception as e:
         return render_template("error.html", error_desc="That spot is already reserved.")
 
     print license_plate

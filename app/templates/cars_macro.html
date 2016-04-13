@@ -10,7 +10,9 @@
 					<h4> {{car.make}} {{car.model}} </h4>
 					<label> License Plate No: </label> {{ car.plate_num}} <br>
 					<label> Color: </label> {{ car.color }} <br>
-					<label> Current spot: </label> {{car.spot_number}} <br>
+					{% if car.spot_number %}
+						<label> Current spot: </label> {{car.spot_number}} <br>
+					{% endif %}
 					<label> Default spot: </label> {{car.default_spot}} <br>
 					<label>	Drivers: </label>
 					<ul>
@@ -18,9 +20,11 @@
 							<li> {{ driver.fname }} </li>
 						{% endfor %}
 					</ul>
+					{% if car.spot_number %}
 					<label class="active">
 						<input type="checkbox" name="{{car.plate_num}} {{car.state}}" {% if car.is_requested %} checked {% endif %}>
 					</label>
+					{% endif %}
 				</div>
 				{% endfor %}
 			</div>
