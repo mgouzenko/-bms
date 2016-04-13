@@ -134,12 +134,13 @@ CREATE TABLE provides_services_for ( -- buildings that service providers work in
 DROP TABLE if exists drives;
 CREATE TABLE drives (
 	entrant_id INTEGER,
+	building_id INTEGER,
 	state VARCHAR (2),
 	plate_num VARCHAR(10),
-	PRIMARY KEY (entrant_id, state, plate_num),
+	PRIMARY KEY (entrant_id, building_id, state, plate_num),
 	FOREIGN KEY (entrant_id) REFERENCES entrants
 						     ON DELETE CASCADE,
-	FOREIGN KEY (state, plate_num) REFERENCES vehicles
+	FOREIGN KEY (building_id, state, plate_num) REFERENCES vehicles
 								   ON DELETE CASCADE
 );
 
