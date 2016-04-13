@@ -235,6 +235,14 @@ def display_dashboard(user_id, dash_type):
                 cars=cars,
                 entity_type="Resident")
 
+    elif dash_type == 'services':
+        services = service_providers.list_for_building(resident.building_id, g.conn)
+
+        return render_template(
+            'resident_dashboard_services.html',
+            resident=resident,
+            services=services)
+
     return redirect('/')
 
 @app.route('/car/<state>/<license_plate>/', methods=['GET', 'POST'])

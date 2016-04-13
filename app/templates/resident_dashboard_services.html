@@ -1,0 +1,13 @@
+{% import 'services_macro.html' as services_macro %}
+{% extends "resident_dashboard_base.html" %}
+{% block body %}
+	{{ services_macro.display_services(services) }}
+{% endblock %}
+
+{% block js_hooks %}
+<script>
+	//$.fn.bootstrapSwitch.defaults.onText = ' ';
+	//$("[type='checkbox']").bootstrapSwitch();
+
+</script>
+{% endblock %}

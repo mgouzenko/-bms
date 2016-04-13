@@ -1,0 +1,16 @@
+{% macro display_services(services) -%}
+<div class="container">
+	<h1>Available Services</h1>
+
+	<div class="col-sm-12">
+		{% for service in services %}
+		<div class="well">
+			<h4> {{ service.business_name}} </h4>
+			<label> Description: </label> {{ service.business_description }} <br>
+			<label> Phone Number: </label> {{service.phone_num }} <br>
+			<label>	Email: </label> {{ service.email }} <br>
+		</div>
+		{% endfor %}
+	</div>
+</div>
+{%- endmacro %}
