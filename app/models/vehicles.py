@@ -40,8 +40,17 @@ class vehicles(object):
         return vehicles(*result) if result else None
 
     @staticmethod
-    def find_requested_cars(database_connection, building_id, spot):
-        pass
+    def find_requested_cars(database_connection, building_id):
+        query = """SELECT state, plate_num, make, model, color, is_requested,
+                          key_number, spot_number, default_spot, building_id
+                   FROM parking_spots natural join vehicles
+                   WHERE building_id = :bid and is_requested = TRUE"""
+
+        cursor = database_connection.execute(
+                text(query), bid=building_id)
+
+        return [vehicles(*result) for result in cursor]
+
 
     @staticmethod
     def find_by_license_plate(database_connection, state, license_plate):
