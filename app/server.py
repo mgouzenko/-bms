@@ -178,6 +178,51 @@ def admin_dashboard(admin_id, dash_type):
         return redirect('/')
 
     admin = admins.find_by_id(g.user_id, g.conn)
+    eid = None
+    if dash_type == 'manage':
+        if request.method == 'POST':
+            eid = request.form.get('eid')
+            fname = request.form.get('fname')
+            lname = request.form.get('lname')
+            resident = None
+            try:
+                resident = residents.find_by_id(eid, g.conn)
+            except:
+                flash('There was an error finding the resident')
+            if resident and fname:
+                new_guest = guests(
+                        building_id=resident.building_id,
+                        unit_id=resident.unit_id,
+                        fname=fname,
+                        lname=lname)
+                new_guest.put(g.conn)
+                flash('{} {} added as guest of {} {}'.format(
+                    fname, lname, resident.fname, resident.lname))
+        if not eid:
+            eid = request.args.get('eid', None)
+
+        if eid is None:
+            return redirect('/admin_dashboard/{}'.format(admin.entrant_id))
+
+        entrant = residents.find_by_id(eid, g.conn)
+        is_resident = True
+        entrant_guests = []
+        if not entrant:
+            is_resident = False
+            entrant = entrants.find_by_id(eid, g.conn)
+        else:
+            entrant_guests = entrant.get_guests(g.conn)
+
+        if not entrant:
+            return redirect('/admin_dashboard/{}'.format(admin.entrant_id))
+
+        return render_template(
+                'admin_dashboard_manage.html',
+                entrant=entrant,
+                guests=entrant_guests,
+                admin=admin,
+                is_resident=is_resident)
+
 
     if dash_type == 'search':
         search_results = []

@@ -1,0 +1,47 @@
+{% extends "admin_dashboard_base.html" %}
+{% block body %}
+<div class="container">
+	{% if is_resident %}
+	<h3>Managing Guests for {{entrant.fname}} {{entrant.lname}}</h3><br>
+	<hr>
+	<h4>Add a Guest</h4>
+	<form method="POST" class="form-horizontal" role="form">
+		<input class="form-control" name="eid" id="eid" type="hidden" value="{{entrant.entrant_id}}">
+		  <div class="form-group">
+			<label class="control-label col-sm-2" for="fname">First Name:</label>
+			<div class="col-sm-10">
+			  <input class="form-control" name="fname" id="fname" placeholder="First Name">
+			</div>
+		  </div>
+		  <div class="form-group">
+			<label class="control-label col-sm-2" for="lname">Last Name:</label>
+			<div class="col-sm-10">
+			  <input class="form-control" name="lname" id="lname" placeholder="Last Name">
+			</div>
+		  </div>
+		  <div class="form-group">
+			<div class="col-sm-offset-2 col-sm-10">
+			  <button type="submit" class="btn btn-primary">Add Guest</button>
+			</div>
+		  </div>
+	</form>
+	<hr>
+	<h4>Current Guests</h4>
+		<ul>
+			{% for guest in guests %}
+				<li>{{guest.fname}} {{guest.lname}}</li>
+			{% endfor %}
+		</ul>
+	{% else %}
+	<h3> Guest: {{entrant.fname}} {{entrant.lname}} </h3>
+	{% endif %}
+</div>
+{% endblock %}
+
+{% block js_hooks %}
+<script>
+	//$.fn.bootstrapSwitch.defaults.onText = ' ';
+	//$("[type='checkbox']").bootstrapSwitch();
+
+</script>
+{% endblock %}

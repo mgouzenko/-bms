@@ -24,7 +24,7 @@
 			  {% for entrant in results %}
 		      <div class="row well well-sm">
 				<div class="col-sm-4">
-					<h4> {{entrant.fname}} {{entrant.lname}} </h4>
+					<h4> <a href="manage?eid={{entrant.entrant_id}}">{{entrant.fname}} {{entrant.lname}}</a></h4>
 					<label>Entrant Id: </label> {{entrant.entrant_id}} <br>
 					<label>Username: </label> {{entrant.username}} <br>
 					<label>Phone Number: </label> {{entrant.phone_num}} <br>
