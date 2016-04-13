@@ -93,11 +93,12 @@ CREATE TABLE vehicles (
 	PRIMARY KEY (building_id, state, plate_num)
 );
 
-DROP TABLE if exists of_a;
+DROP TABLE if exists of_a CASCADE;
 CREATE TABLE of_a ( -- Entrant of a building
 	building_id INTEGER,
 	entrant_id INTEGER,
-	PRIMARY KEY (building_id, entrant_id),
+	PRIMARY KEY (entrant_id, building_id),
+	UNIQUE(entrant_id),
 	FOREIGN KEY (entrant_id) REFERENCES entrants
 							 ON DELETE CASCADE,
 	FOREIGN KEY (building_id) REFERENCES buildings
@@ -144,6 +145,7 @@ CREATE TABLE unit_entrants ( --superclass is entrants
 	unit_id VARCHAR(6) NOT NULL,
 	building_id INTEGER NOT NULL,
 	PRIMARY KEY (entrant_id),
+	FOREIGN KEY (entrant_id, building_id) REFERENCES of_a,
 	FOREIGN KEY (entrant_id) REFERENCES entrants
 						     ON DELETE CASCADE,
 	FOREIGN KEY (unit_id, building_id) REFERENCES units

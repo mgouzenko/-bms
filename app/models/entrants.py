@@ -228,6 +228,7 @@ class residents(entrants):
                    FROM unit_entrants NATURAL JOIN drives NATURAL JOIN vehicles
                    WHERE building_id = :bid and unit_id = :uid
                    """
+        print self.building_id
         cursor = database_connection.execute(
                 text(query), bid=self.building_id, uid=self.unit_id)
 
