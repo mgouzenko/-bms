@@ -25,7 +25,7 @@
 						<li> {{ driver.fname }} </li>
 					{% endfor %}
 				</ul>
-				<form method="POST" action="unpark_car/{{ car.state }}/{{ car.plate_num }}">
+				<form method="POST" action="?ups={{ car.state }}&upl={{ car.plate_num }}">
 					<button type="submit" class="btn btn-primary">Mark as Unparked</button>
 				</form>
 			</div>

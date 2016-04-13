@@ -192,6 +192,12 @@ def admin_dashboard(admin_id, dash_type):
                 results=search_results)
 
     if dash_type == 'requested_cars':
+        if request.method == 'POST': # Unpark the car in the get params
+            state_of_car_to_unpark = request.args.get('ups')
+            pnum_of_car_to_unpark  = request.args.get('upl')
+
+            unpark_car(admin.building_id, state_of_car_to_unpark, pnum_of_car_to_unpark)
+
         cars = vehicles.find_requested_cars(g.conn, admin.building_id)
         map(lambda c: c.get_drivers(g.conn), cars)
         return render_template('requested_cars.html', cars=cars, admin=admin)
@@ -253,6 +259,7 @@ def admin_dashboard(admin_id, dash_type):
         if car is None:
             return redirect('/')
         return render_template('edit_car.html', car=car, admin=admin)
+
 
 @app.route('/resident_dashboard/<user_id>')
 def route_to_guests(user_id):
@@ -404,17 +411,11 @@ def add_car():
 
     return render_template('add_car.html', admin=admin)
 
-@app.route('/requested_cars/<building_id>/unpark_car/<state>/<plate_num>', methods=['POST'])
 def unpark_car(building_id, state, plate_num):
-    # TODO unpark car only in current building
-    # TODO link this to admin dashboard
     g.conn.execute(
                 'UPDATE vehicles\
                  SET spot_number = NULL, key_number = NULL, is_requested = FALSE \
-                 WHERE building_id = ' + str(building_id) + ' AND state = \'' + str(state) + '\' AND plate_num = \'' + str(license_plate) + '\'')
-
-    return redirect("/requested_cars/" + building_id)
-
+                 WHERE building_id = ' + str(building_id) + ' AND state = \'' + str(state) + '\' AND plate_num = \'' + str(plate_num) + '\'')
 
 @app.route('/<int:provider_id>/business_dashboard', methods=['GET', 'POST'])
 def business_dashboard(provider_id):
