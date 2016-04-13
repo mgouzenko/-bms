@@ -1,6 +1,8 @@
 {% extends 'admin_dashboard_base.html' %}
 {% block body %}
 <div class="container">
+	<h3>Entrant Lookup</h3>
+	<hr>
 	<form action="search" method="POST" class="form-horizontal" role="form">
 		  <div class="form-group">
 			<label class="control-label col-sm-2" for="fname">First Name:</label>
@@ -19,16 +21,36 @@
 			  <button type="submit" class="btn btn-primary">Search Entrants</button>
 			</div>
 		  </div>
-		  <div class="container">
 			  {% for entrant in results %}
-				<div class="well well-sm">
+		      <div class="row well well-sm">
+				<div class="col-sm-4">
 					<h4> {{entrant.fname}} {{entrant.lname}} </h4>
 					<label>Entrant Id: </label> {{entrant.entrant_id}} <br>
 					<label>Username: </label> {{entrant.username}} <br>
 					<label>Phone Number: </label> {{entrant.phone_num}} <br>
 				</div>
+				<form role="form" method="post">
+					<div class="col-sm-4">
+						<br>
+						<input class="form-control" name="prev_fname" type="hidden" value="{{fname_search}}">
+						<input class="form-control" name="prev_lname" type="hidden" value="{{lname_search}}">
+						<input class="form-control" name="eid" type="hidden" value="{{entrant.entrant_id}}">
+						<div class="form-group">
+							<input class="form-control" id="plate_num" name="plate_num" placeholder="Plate No.">
+						</div>
+						<div class="form-group">
+							<input class="form-control" id="state" name="state" placeholder="State">
+						</div>
+					</div>
+					<div class="col-sm-3 col-sm-offset-1">
+						<br><br>
+						<div class="form-group">
+							<button type="submit" class="btn btn-primary">Add as Driver</button>
+						</div>
+					</div>
+				</form>
+			   </div>
 			  {% endfor %}
-		  </div>
 	</form>
 </div>
 {% endblock %}

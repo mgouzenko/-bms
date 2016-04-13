@@ -38,11 +38,13 @@ class vehicles(object):
     def request(self, database_connection, requested=True):
         self.is_requested = requested
         query = """UPDATE vehicles set is_requested = :req
-                   WHERE plate_num = :num AND state = :state"""
+                   WHERE plate_num = :num AND state = :state
+                                          AND building_id = :bid """
         database_connection.execute(text(query),
                                     req=requested,
                                     num=self.plate_num,
-                                    state=self.state)
+                                    state=self.state,
+                                    bid=self.building_id)
 
 
     def get_drivers(self, database_connection):
@@ -50,9 +52,9 @@ class vehicles(object):
             return self.drivers
         query = """SELECT entrant_id
                    FROM entrants NATURAL JOIN drives NATURAL JOIN vehicles
-                   WHERE state = :s and plate_num = :pn"""
+                   WHERE state = :s and plate_num = :pn and building_id = :bid"""
         cursor = database_connection.execute(
-                text(query), s=self.state, pn=self.plate_num)
+                text(query), s=self.state, pn=self.plate_num, bid=self.building_id)
         from entrants import entrants
         self.drivers = [entrants.find_by_id(entrant_id[0], database_connection)
                         for entrant_id in cursor]
@@ -83,13 +85,14 @@ class vehicles(object):
 
 
     @staticmethod
-    def find_by_license_plate(database_connection, state, license_plate):
+    def find_by_license_plate(database_connection, state, license_plate, bid):
         query = query = """SELECT state, plate_num, make, model, color, is_requested,
                                   key_number, spot_number, default_spot, building_id
                            FROM parking_spots NATURAL RIGHT OUTER JOIN vehicles
-                           WHERE state = :state and plate_num = :plate_num"""
+                           WHERE state = :state and plate_num = :plate_num
+                                                and building_id = :bid"""
         cursor = database_connection.execute(
-            text(query), state=state, plate_num=license_plate)
+            text(query), state=state, plate_num=license_plate, bid=bid)
 
         result = cursor.fetchone()
         return vehicles(*result) if result else None

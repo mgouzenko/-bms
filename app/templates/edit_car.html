@@ -59,6 +59,14 @@
       </div>
     </div>
 
+	<hr>
+  <h3> <em> Drivers </em></h3>
+	  <ul>
+	  {% for driver in car.drivers %}
+		  <li>{{driver.fname}}</li>
+	  {% endfor %}
+	  </ul>
+
     <!-- Park Car Button -->
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">

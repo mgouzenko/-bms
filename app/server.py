@@ -181,15 +181,42 @@ def admin_dashboard(admin_id, dash_type):
 
     if dash_type == 'search':
         search_results = []
-        if request.method == 'POST':
-            fname = request.form.get('fname')
-            lname = request.form.get('lname')
+
+        fname = request.form.get('fname')
+        lname = request.form.get('lname')
+        if fname or lname:
             search_results = entrants.search_by_name(
                     fname, lname, admin.building_id, g.conn)
+        else:
+            fname = request.form.get('prev_fname', '')
+            lname = request.form.get('prev_lname', '')
+            search_results = entrants.search_by_name(
+                    fname, lname, admin.building_id, g.conn)
+
+        plate_num = request.form.get('plate_num', '')
+        state = request.form.get('state', '')
+        entrant_id = request.form.get('eid', '')
+
+        if plate_num and state and entrant_id:
+            entrant = entrants.find_by_id(entrant_id, g.conn)
+            success = entrants.add_as_driver(state,
+                                             plate_num,
+                                             admin.building_id,
+                                             entrant_id,
+                                             g.conn)
+            if success:
+                flash('Successfully added {} {} as driver of {}'.format(
+                    entrant.fname, entrant.lname, plate_num))
+            else:
+                flash('Car with state {} and plate number {} does not exist.'.format(
+                    state, plate_num))
+
         return render_template(
                 'admin_dashboard_search.html',
                 admin=admin,
-                results=search_results)
+                results=search_results,
+                fname_search=fname,
+                lname_search=lname)
 
     if dash_type == 'requested_cars':
         cars = vehicles.find_requested_cars(g.conn, admin.building_id)
@@ -200,7 +227,7 @@ def admin_dashboard(admin_id, dash_type):
         if request.method == 'POST':
             state = request.form.get('state')
             pnum = request.form.get('pnum')
-            res = vehicles.find_by_license_plate(g.conn, state, pnum)
+            res = vehicles.find_by_license_plate(g.conn, state, pnum, admin.building_id)
             if res is not None:
                 return redirect(
                         '/admin_dashboard/{}/edit_car?s={}&l={}'.format(
@@ -249,9 +276,12 @@ def admin_dashboard(admin_id, dash_type):
                 park_car(state, pnum, request)
             except:
                 flash('Error: Spot or key slot is taken')
-        car = vehicles.find_by_license_plate(g.conn, state, pnum)
+        car = vehicles.find_by_license_plate(g.conn, state, pnum, admin.building_id)
         if car is None:
             return redirect('/')
+
+        car.get_drivers(g.conn)
+
         return render_template('edit_car.html', car=car, admin=admin)
 
 @app.route('/resident_dashboard/<user_id>')
@@ -315,21 +345,6 @@ def display_dashboard(user_id, dash_type):
             services=services)
 
     return redirect('/')
-
-@app.route('/car/<state>/<license_plate>/', methods=['GET', 'POST'])
-def car(state, license_plate):
-    if g.entity_type != 'admins':
-        return redirect('/')
-
-    admin = admins.find_by_id(g.user_id, g.conn)
-
-    car = vehicles.find_by_license_plate(g.conn, state, license_plate)
-
-    if(car != None):
-        return render_template('edit_car.html', car=car, admin=admin)
-    else:
-        return render_template(
-                'error.html', error_desc="That car was not found.", admin=admin)
 
 def update_car(state, license_plate, request):
     # Update the database based on the form data

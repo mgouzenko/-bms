@@ -21,6 +21,29 @@ class entrants(object):
         self.building_id = building_id
 
     @staticmethod
+    def add_as_driver(state, plate_num, building_id, entrant_id,
+            database_connection):
+        car = vehicles.find_by_license_plate(database_connection,
+                                             state, plate_num, building_id)
+        if not car:
+            return False
+
+        drivers = car.get_drivers(database_connection)
+        for driver in drivers:
+            if driver.entrant_id == entrant_id:
+                return True
+
+        query = """INSERT INTO drives
+                        (entrant_id, building_id, plate_num, state)
+                   VALUES (:eid, :bid, :plate_num, :state)"""
+        database_connection.execute(text(query),
+                                    eid=entrant_id,
+                                    bid=building_id,
+                                    plate_num=plate_num,
+                                    state=state)
+        return True
+
+    @staticmethod
     def search_by_name(fname, lname, building_id, database_connection):
         search_predicates = ['building_id = :building_id']
         search_attrs = {'building_id': building_id}
