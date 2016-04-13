@@ -3,6 +3,19 @@
 <div class="container">
 	{% if is_resident %}
 	<h3>Managing Guests for {{entrant.fname}} {{entrant.lname}}</h3><br>
+	<label>Unit: </label> {{entrant.unit_id}} <br>
+	<label>Username: </label> {{entrant.username}} <br>
+	{% else %}
+	<h3> Guest: {{entrant.fname}} {{entrant.lname}} </h3>
+	{% endif %}
+	<label>Drives:</label><br>
+	<ul>
+		{% for car in cars %}
+		<li> <a href="edit_car?s={{car.state}}&l={{car.plate_num}}">
+				{{car.plate_num}}</a>: {{car.color}} {{car.make}} {{car.model}} </li>
+		{% endfor %}
+	</ul>
+	{% if is_resident %}
 	<hr>
 	<h4>Add a Guest</h4>
 	<form method="POST" class="form-horizontal" role="form">
@@ -32,8 +45,6 @@
 				<li>{{guest.fname}} {{guest.lname}}</li>
 			{% endfor %}
 		</ul>
-	{% else %}
-	<h3> Guest: {{entrant.fname}} {{entrant.lname}} </h3>
 	{% endif %}
 </div>
 {% endblock %}

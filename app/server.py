@@ -178,8 +178,10 @@ def admin_dashboard(admin_id, dash_type):
         return redirect('/')
 
     admin = admins.find_by_id(g.user_id, g.conn)
-    eid = None
+    admin.get_building(g.conn)
     if dash_type == 'manage':
+        eid = None
+
         if request.method == 'POST':
             eid = request.form.get('eid')
             fname = request.form.get('fname')
@@ -216,11 +218,14 @@ def admin_dashboard(admin_id, dash_type):
         if not entrant:
             return redirect('/admin_dashboard/{}'.format(admin.entrant_id))
 
+        cars = entrant.get_driven_cars(g.conn)
+
         return render_template(
                 'admin_dashboard_manage.html',
                 entrant=entrant,
                 guests=entrant_guests,
                 admin=admin,
+                cars=cars if cars else [],
                 is_resident=is_resident)
 
 

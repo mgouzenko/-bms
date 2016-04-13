@@ -20,6 +20,20 @@ class entrants(object):
         self.phone_num = phone_num
         self.building_id = building_id
 
+    def get_driven_cars(self, database_connection):
+        query = """SELECT state, plate_num, building_id
+                   FROM vehicles NATURAL JOIN drives NATURAL JOIN entrants
+                   WHERE entrant_id = :eid"""
+        cursor = database_connection.execute(text(query), eid=self.entrant_id)
+
+        cars = []
+        for state, plate_num, building_id in cursor:
+            car = vehicles.find_by_license_plate(
+                    database_connection, state, plate_num, building_id)
+            if car:
+                cars.append(car)
+        return cars
+
     @staticmethod
     def add_as_driver(state, plate_num, building_id, entrant_id,
             database_connection):
@@ -124,6 +138,18 @@ class entrants(object):
         return entrants(*result)
 
 class admins(entrants):
+
+    def __init__(self, *args, **kwargs):
+        super(admins, self).__init__(*args, **kwargs)
+        self.building_name = None
+
+    def get_building(self, database_connection):
+        query = "SELECT building_name FROM buildings WHERE building_id = :bid"
+        cursor = database_connection.execute(text(query), bid=self.building_id)
+        res = cursor.fetchone()
+        if res:
+            self.building_name = res[0]
+        return self.building_name
 
     @staticmethod
     def find_by_username(username, database_connection):
@@ -241,7 +267,6 @@ class residents(entrants):
                    FROM unit_entrants NATURAL JOIN drives NATURAL JOIN vehicles
                    WHERE building_id = :bid and unit_id = :uid
                    """
-        print self.building_id
         cursor = database_connection.execute(
                 text(query), bid=self.building_id, uid=self.unit_id)
 
