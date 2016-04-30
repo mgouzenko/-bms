@@ -27,9 +27,9 @@ WHERE service_providers.business_id = provides_services_for.business_id and
 	  and entrants.fname = 'Tania' and entrants.lname = 'Gouzenko' and
 	  to_tsvector(service_providers.business_description_long) @@ to_tsquery('clean');
 
-This query joins service providers with the buildings the service, and looks
-for tuples where the building id is the same as the one Tania Gouzenko lives
-in. The result of this query is:
+This query joins service providers with the buildings they provide services
+for, and looks only for tuples where the building id is the same as the one Tania
+Gouzenko lives in. The result of this query is:
 
      business_name      |                        business_description                         | phone_num
 ------------------------+---------------------------------------------------------------------+------------
@@ -39,7 +39,9 @@ in. The result of this query is:
 (3 rows)
 
 Now, Tania can comfortably pick up the phone and call any one of those
-services, depending on what needs she has.
+services, depending on what needs she has. When she does so, she knows that
+the businesses in the result already have a professional relationship with the
+building she lives in.
 
 Second Item: Timestamp Arrays for Car Requests
 ********************************************************************************
@@ -77,3 +79,4 @@ administrators must keep a log book of all the times they retreived a given car.
 This is actually a requirement in a building whose management we spoke to; if
 there are ever any accusations of damage, the management can look at the
 valet's handwritten logs and see what times the car in question was retrieved.
+That way, they know what times to inspect in surveillance camera footage.
