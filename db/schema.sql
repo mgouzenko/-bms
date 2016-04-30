@@ -44,7 +44,8 @@ DROP TABLE if exists service_providers CASCADE;
 CREATE TABLE service_providers (
 	business_id INTEGER,
 	business_name VARCHAR(120),
-	business_description VARCHAR(1000),
+	business_description_long TEXT,
+	business_description TEXT,
 	phone_num VARCHAR(12),
 	email VARCHAR(120) NOT NULL,
 	UNIQUE(email),
@@ -85,6 +86,7 @@ CREATE TABLE vehicles (
 	spot_number INTEGER,
 	default_spot INTEGER,
 	building_id INTEGER,
+	request_times TIMESTAMP ARRAY,
 	UNIQUE (spot_number, building_id),
 	UNIQUE (default_spot, building_id),
 	UNIQUE (key_number, building_id),
