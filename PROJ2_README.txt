@@ -109,9 +109,9 @@ order:
 This list could be useful if, for legal reasons, someone needs to go back and 
 check all the times that a particular car was requested.
 
-Third Item: Trigger that adds time_requested to a vehicle when requested
+Third Item: Trigger that updates request_times of a vehicle when requested
 ********************************************************************************
-Expanding upon the previous item, it would be useful if the time_requested 
+Expanding upon the previous item, it would be useful if the request_times 
 array was automatically updated whenever a car is requested. To accomplish this
 without implementing it at the application level, we added a trigger that would
 automatically prepend the current time to the request_times array of a vehicle 
@@ -128,7 +128,7 @@ WHERE vehicles.state = 'MA' and
 
 This update command is an event that causes the trigger to be executed. As a
 result, the current time will be added to the beginning of the 
-time_requested array of this particular vehicle.
+request_times array of this particular vehicle.
 
 We can check the times that this vehicle was requested with the following 
 query
