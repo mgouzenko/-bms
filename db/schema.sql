@@ -189,3 +189,16 @@ CREATE TABLE owns ( -- parking spot owned by a unit
 	FOREIGN KEY (spot_number, building_id) REFERENCES parking_spots
 										   ON DELETE CASCADE
 );
+
+DROP FUNCTION if exists log_vehicle_request();
+CREATE FUNCTION log_vehicle_request() RETURNS TRIGGER AS $log_vehicle_request$
+	BEGIN
+		NEW.request_times := date_trunc('second', localtimestamp) || NEW.request_times;
+		RETURN NEW;
+	END;
+$log_vehicle_request$ LANGUAGE plpgsql;
+
+CREATE TRIGGER log_vehicle_request 
+	BEFORE INSERT OR UPDATE OF is_requested ON vehicles
+	FOR EACH ROW WHEN (NEW.is_requested = TRUE)
+	EXECUTE PROCEDURE log_vehicle_request();
